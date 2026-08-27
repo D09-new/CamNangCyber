@@ -773,16 +773,20 @@ namespace TuDienChuyenNganhCyberSecurity
             if (cmbNgaySua.SelectedIndex == 0)
             {
                 kieuSapXep = "";
+                dgvDSTU.Columns["ModifiedDate"].Visible = false;
             }
             else if (cmbNgaySua.SelectedIndex == 1)
             {
                 kieuSapXep = "ModifiedDate ASC";
+                dgvDSTU.Columns["ModifiedDate"].Visible = true;
             }
             else
             {
                 kieuSapXep = "ModifiedDate DESC";
+                dgvDSTU.Columns["ModifiedDate"].Visible = true;
             }
             cmbNgayTao.SelectedIndex = 0;
+            dgvDSTU.Columns["CreatedDate"].Visible = false;
             DisplayPage(1);
         }
 
@@ -791,16 +795,20 @@ namespace TuDienChuyenNganhCyberSecurity
             if (cmbNgayTao.SelectedIndex == 0)
             {
                 kieuSapXep = "";
+                dgvDSTU.Columns["CreatedDate"].Visible = false;
             }
             else if (cmbNgayTao.SelectedIndex == 1)
             {
                 kieuSapXep = "CreatedDate ASC";
+                dgvDSTU.Columns["CreatedDate"].Visible = true;
             }
             else
             {
                 kieuSapXep = "CreatedDate DESC";
+                dgvDSTU.Columns["CreatedDate"].Visible = true;
             }
             cmbNgaySua.SelectedIndex = 0;
+            dgvDSTU.Columns["ModifiedDate"].Visible = false;
             DisplayPage(1);
         }
 

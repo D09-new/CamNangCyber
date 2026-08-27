@@ -13,7 +13,8 @@ namespace TuDienChuyenNganhCyberSecurity
         ///  The main entry point for the application.
         /// </summary>
         static public readonly string appPath = AppDomain.CurrentDomain.BaseDirectory;
-        static public readonly string connectionString = $@"DataSource={appPath}CamNangCS.db;Version=3;";
+        static public readonly string dbPath = Path.Combine(appPath, "CamNangCS.db");
+        static public readonly string connectionString = $"Data Source={dbPath};Version=3;";
         //public static int KetNoi()
         //{
         //    if (Program.conn != null && Program.conn.State == System.Data.ConnectionState.Open)

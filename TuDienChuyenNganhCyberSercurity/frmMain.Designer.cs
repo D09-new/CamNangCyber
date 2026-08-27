@@ -36,6 +36,8 @@
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle7 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle8 = new DataGridViewCellStyle();
             flowPanel = new FlowLayoutPanel();
             btnTraCuu = new Button();
             imageList1 = new ImageList(components);
@@ -344,7 +346,6 @@
             txtTuDayDu.Size = new Size(579, 29);
             txtTuDayDu.TabIndex = 2;
             txtTuDayDu.Visible = false;
-            
             // 
             // txtTuVietTat
             // 
@@ -383,8 +384,8 @@
             cmbTuVietTat.Size = new Size(304, 33);
             cmbTuVietTat.TabIndex = 1;
             cmbTuVietTat.SelectionChangeCommitted += cmbTuVietTat_SelectionChangeCommitted;
-            cmbTuVietTat.Leave += cmbTuVietTat_Leave;
             cmbTuVietTat.KeyDown += cmbTuVietTat_KeyDown;
+            cmbTuVietTat.Leave += cmbTuVietTat_Leave;
             // 
             // cmbTuDayDu
             // 
@@ -394,8 +395,8 @@
             cmbTuDayDu.Size = new Size(579, 33);
             cmbTuDayDu.TabIndex = 2;
             cmbTuDayDu.SelectionChangeCommitted += cmbTuDayDu_SelectionChangeCommitted;
-            cmbTuDayDu.Leave += cmbTuDayDu_Leave;
             cmbTuDayDu.KeyDown += cmbTuDayDu_KeyDown;
+            cmbTuDayDu.Leave += cmbTuDayDu_Leave;
             // 
             // label5
             // 
@@ -547,21 +548,31 @@
             // 
             // CreatedDate
             // 
+            dataGridViewCellStyle7.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle7.Font = new Font("Times New Roman", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle7.ForeColor = Color.Black;
+            CreatedDate.DefaultCellStyle = dataGridViewCellStyle7;
             CreatedDate.DataPropertyName = "CreatedDate";
             CreatedDate.HeaderText = "CreatedDate";
-            CreatedDate.MinimumWidth = 6;
+            CreatedDate.Width = 110;
             CreatedDate.Name = "CreatedDate";
             CreatedDate.ReadOnly = true;
             CreatedDate.Visible = false;
+            CreatedDate.Resizable = DataGridViewTriState.False;
             // 
             // ModifiedDate
             // 
+            dataGridViewCellStyle8.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle8.Font = new Font("Times New Roman", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle8.ForeColor = Color.Black;
+            ModifiedDate.DefaultCellStyle = dataGridViewCellStyle8;
             ModifiedDate.DataPropertyName = "ModifiedDate";
             ModifiedDate.HeaderText = "ModifiedDate";
-            ModifiedDate.MinimumWidth = 6;
+            ModifiedDate.Width = 130;
             ModifiedDate.Name = "ModifiedDate";
             ModifiedDate.ReadOnly = true;
             ModifiedDate.Visible = false;
+            ModifiedDate.Resizable = DataGridViewTriState.False;
             // 
             // panel6
             // 
@@ -934,6 +945,7 @@
             Controls.Add(panel1);
             Controls.Add(flowPanel);
             Font = new Font("Segoe UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Margin = new Padding(4);
             Name = "frmMain";
             Text = "Cẩm nang Cyber";
