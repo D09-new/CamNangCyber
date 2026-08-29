@@ -21,9 +21,15 @@ namespace TuDienChuyenNganhCyberSecurity
         string linhvuc = "Tất cả";
         string tuviettat = "";
         string tudaydu = "";
+        RichTextBox targetRtb;
+        int selectionStart = -1;
+        int selectionLength = 0;
+
         public frmMain()
         {
             InitializeComponent();
+            InitColorPicker();
+            InitSymbolPicker();
             cmbTuDayDu.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
             cmbTuDayDu.AutoCompleteSource = AutoCompleteSource.ListItems;
             cmbTuVietTat.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
@@ -93,75 +99,170 @@ namespace TuDienChuyenNganhCyberSecurity
                     GanNoiDungRichTextBox(txtGhiChu, row["GhiChu"]);
                     cmbLinhVuc1.SelectedValue = row["LinhVuc"];
                 }
-                colorMenu.AutoSize = true;
-                colorMenu.DropShadowEnabled = true;
-
-                // 2. Khởi tạo và cấu hình lưới màu chặt chẽ
-                TableLayoutPanel colorGrid = new TableLayoutPanel();
-                colorGrid.ColumnCount = 8;
-                colorGrid.RowCount = 2;
-
-                // ÉP CỐ ĐỊNH KÍCH THƯỚC LƯỚI MÀU (Chiều rộng 200px, Chiều cao 55px)
-                // Điều này ngăn menu biến nó thành sọc dọc
-                colorGrid.Size = new Size(200, 55);
-                colorGrid.MaximumSize = new Size(200, 55);
-                colorGrid.MinimumSize = new Size(200, 55);
-                colorGrid.Padding = new Padding(2);
-                colorGrid.Margin = new Padding(0);
-
-                // QUAN TRỌNG: Chia đều 8 cột, mỗi cột chiếm 12.5% độ rộng
-                for (int i = 0; i < 8; i++)
-                {
-                    colorGrid.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 12.5f));
-                }
-                // Chia đều 2 hàng, mỗi hàng chiếm 50% độ cao
-                for (int i = 0; i < 2; i++)
-                {
-                    colorGrid.RowStyles.Add(new RowStyle(SizeType.Percent, 50f));
-                }
-
-                // Mảng 16 màu phổ biến giống Word
-                Color[] colors = {  Color.Black, Color.Gray, Color.Red, Color.Orange, Color.Yellow,
-                                    Color.Green, Color.Blue, Color.Purple, Color.White, Color.LightGray,
-                                    Color.Pink, Color.LightSalmon, Color.LightYellow, Color.LightGreen,
-                                    Color.LightSkyBlue, Color.Lavender
-                                  };
-
-                // 3. Tạo các ô màu nhỏ đưa vào lưới
-                foreach (Color col in colors)
-                {
-                    Button cell = new Button();
-                    cell.Dock = DockStyle.Fill; // Để ô màu tự lấp đầy ô lưới được chia
-                    cell.Margin = new Padding(2); // Khoảng cách giữa các ô màu
-                    cell.BackColor = col;
-                    cell.FlatStyle = FlatStyle.Flat;
-                    cell.FlatAppearance.BorderSize = 1;
-                    cell.FlatAppearance.BorderColor = Color.Silver;
-                    cell.Cursor = Cursors.Hand;
-
-                    cell.Click += (s, ev) =>
-                    {
-                        ChangeColor(col);
-                        colorMenu.Close();
-                    };
-
-                    colorGrid.Controls.Add(cell);
-                }
-
-                // 4. Nhúng lưới màu vào menu đã thiết kế bằng giao diện
-                ToolStripControlHost host = new ToolStripControlHost(colorGrid);
-                host.AutoSize = false; // Tắt AutoSize của host để nó tuân theo kích thước 200x55 cố định ở trên
-                host.Size = new Size(200, 55);
-                host.Margin = Padding.Empty;
-                host.Padding = Padding.Empty;
-                colorMenu.Items.Insert(0, host);
-                colorMenu.Items.Insert(1, new ToolStripSeparator());
                 isLoading = false;
 
             }
             catch (SQLiteException ex)
             {
                 MessageBox.Show("Đã xảy ra lỗi khi tải dữ liệu: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
+        private void InitSymbolPicker()
+        {
+            symbolMenu.AutoSize = true;
+            symbolMenu.DropShadowEnabled = true;
+
+            // 2. Khởi tạo và cấu hình lưới màu chặt chẽ
+            TableLayoutPanel symbolGrid = new TableLayoutPanel();
+            symbolGrid.ColumnCount = 8;
+            symbolGrid.RowCount = 2;
+
+            // ÉP CỐ ĐỊNH KÍCH THƯỚC LƯỚI (Chiều rộng 200px, Chiều cao 55px)
+            // Điều này ngăn menu biến nó thành sọc dọc
+            symbolGrid.Size = new Size(200, 55);
+            symbolGrid.MaximumSize = new Size(300, 300);
+            symbolGrid.MinimumSize = new Size(300, 300);
+            symbolGrid.Padding = new Padding(2);
+            symbolGrid.Margin = new Padding(0);
+
+            // QUAN TRỌNG: Chia đều 8 cột, mỗi cột chiếm 12.5% độ rộng
+            for (int i = 0; i < 8; i++)
+            {
+                symbolGrid.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 12.5f));
+            }
+            // Chia đều 2 hàng, mỗi hàng chiếm 50% độ cao
+            for (int i = 0; i < 6; i++)
+            {
+                symbolGrid.RowStyles.Add(new RowStyle(SizeType.Percent, 50f));
+            }
+
+            // Danh sách các ký tự đặc biệt phổ biến
+            string[] symbols = {
+                                    "©", "®", "™", "€", "£", "¥", "¢", "¤",
+                                    "±", "×", "÷", "≠", "≈", "≤", "≥", "∞",
+                                    "½", "⅓", "⅔", "¼", "¾", "‰", "°", "µ",
+                                    "α", "β", "γ", "δ", "π", "Σ", "Ω", "λ",
+                                    "←", "↑", "→", "↓", "↔", "⇒", "⇔", "♥",
+                                    "★", "☎", "✂", "✔", "✖", "⚡", "☀", "☁"
+                                };
+
+            // 3. Tạo các ô màu nhỏ đưa vào lưới
+            foreach (string col in symbols)
+            {
+                Button cell = new Button();
+                cell.Dock = DockStyle.Fill; // Để ô tự lấp đầy ô lưới được chia
+                cell.Margin = new Padding(2); // Khoảng cách giữa các ô 
+                cell.Text = col;
+                cell.FlatStyle = FlatStyle.Flat;
+                cell.FlatAppearance.BorderSize = 1;
+                cell.FlatAppearance.BorderColor = Color.Silver;
+                cell.Cursor = Cursors.Hand;
+
+                cell.Click += (s, ev) =>
+                {
+                    InsertSymbol(col);
+                    symbolMenu.Close();
+                };
+
+                symbolGrid.Controls.Add(cell);
+            }
+
+            // 4. Nhúng lưới vào menu đã thiết kế bằng giao diện
+            ToolStripControlHost host = new ToolStripControlHost(symbolGrid);
+            host.AutoSize = false; // Tắt AutoSize của host để nó tuân theo kích thước 200x55 cố định ở trên
+            host.Size = new Size(300, 300);
+            host.Margin = Padding.Empty;
+            host.Padding = Padding.Empty;
+            host.Font = new Font("Segoe UI", 12); // Đặt font chữ cho các ký tự đặc biệt
+            symbolMenu.Items.Insert(0, host);
+            symbolMenu.Items.Insert(1, new ToolStripSeparator());
+        }
+
+        private void InitColorPicker()
+        {
+            colorMenu.AutoSize = true;
+            colorMenu.DropShadowEnabled = true;
+
+            // 2. Khởi tạo và cấu hình lưới màu chặt chẽ
+            TableLayoutPanel colorGrid = new TableLayoutPanel();
+            colorGrid.ColumnCount = 8;
+            colorGrid.RowCount = 2;
+
+            // ÉP CỐ ĐỊNH KÍCH THƯỚC LƯỚI MÀU (Chiều rộng 200px, Chiều cao 55px)
+            // Điều này ngăn menu biến nó thành sọc dọc
+            colorGrid.Size = new Size(200, 55);
+            colorGrid.MaximumSize = new Size(200, 55);
+            colorGrid.MinimumSize = new Size(200, 55);
+            colorGrid.Padding = new Padding(2);
+            colorGrid.Margin = new Padding(0);
+
+            // QUAN TRỌNG: Chia đều 8 cột, mỗi cột chiếm 12.5% độ rộng
+            for (int i = 0; i < 8; i++)
+            {
+                colorGrid.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 12.5f));
+            }
+            // Chia đều 2 hàng, mỗi hàng chiếm 50% độ cao
+            for (int i = 0; i < 2; i++)
+            {
+                colorGrid.RowStyles.Add(new RowStyle(SizeType.Percent, 50f));
+            }
+
+            // Mảng 16 màu phổ biến giống Word
+            Color[] colors = {  Color.Black, Color.Gray, Color.Red, Color.Orange, Color.Yellow,
+                                    Color.Green, Color.Blue, Color.Purple, Color.White, Color.LightGray,
+                                    Color.Pink, Color.LightSalmon, Color.LightYellow, Color.LightGreen,
+                                    Color.LightSkyBlue, Color.Lavender
+                                  };
+
+            // 3. Tạo các ô màu nhỏ đưa vào lưới
+            foreach (Color col in colors)
+            {
+                Button cell = new Button();
+                cell.Dock = DockStyle.Fill; // Để ô màu tự lấp đầy ô lưới được chia
+                cell.Margin = new Padding(2); // Khoảng cách giữa các ô màu
+                cell.BackColor = col;
+                cell.FlatStyle = FlatStyle.Flat;
+                cell.FlatAppearance.BorderSize = 1;
+                cell.FlatAppearance.BorderColor = Color.Silver;
+                cell.Cursor = Cursors.Hand;
+
+                cell.Click += (s, ev) =>
+                {
+                    ChangeColor(col);
+                    colorMenu.Close();
+                };
+
+                colorGrid.Controls.Add(cell);
+            }
+
+            // 4. Nhúng lưới màu vào menu đã thiết kế bằng giao diện
+            ToolStripControlHost host = new ToolStripControlHost(colorGrid);
+            host.AutoSize = false; // Tắt AutoSize của host để nó tuân theo kích thước 200x55 cố định ở trên
+            host.Size = new Size(200, 55);
+            host.Margin = Padding.Empty;
+            host.Padding = Padding.Empty;
+            colorMenu.Items.Insert(0, host);
+            colorMenu.Items.Insert(1, new ToolStripSeparator());
+        }
+
+
+        private void InsertSymbol(string symbol)
+        {
+            btnShowSymbol.Text = symbol;
+            if (targetRtb != null && selectionStart != -1)
+            {
+                targetRtb.SelectionStart = selectionStart;
+                targetRtb.SelectionLength = selectionLength;
+                targetRtb.SelectedText = symbol;
+                targetRtb.SelectionStart = selectionStart + symbol.Length;
+                targetRtb.SelectionLength = 0;  
+                targetRtb.Focus();
+            }
+            else
+            {
+                MessageBox.Show("Vui lòng chọn ô nhập liệu trước khi chèn ký tự đặc biệt.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 
@@ -430,7 +531,7 @@ namespace TuDienChuyenNganhCyberSecurity
             txtGhiChu.ReadOnly = false;
             txtNoiDung.ReadOnly = false;
             panelFormatText.Visible = lbLinhVuc.Visible = cmbLinhVuc1.Visible = lbTuDayDu.Visible = txtTuDayDu.Visible = lbTuVietTat.Visible = txtTuVietTat.Visible = true;
-            txtNoiDung.BackColor = txtGhiChu.BackColor = Color.FloralWhite;
+            txtNoiDung.BackColor = txtGhiChu.BackColor = Color.Thistle;
         }
         private void btnCapNhat_Click(object sender, EventArgs e)
         {
@@ -465,7 +566,7 @@ namespace TuDienChuyenNganhCyberSecurity
             txtGhiChu.ReadOnly = false;
             txtNoiDung.ReadOnly = false;
             panelFormatText.Visible = lbLinhVuc.Visible = cmbLinhVuc1.Visible = lbTuDayDu.Visible = txtTuDayDu.Visible = lbTuVietTat.Visible = txtTuVietTat.Visible = true;
-            txtNoiDung.BackColor = txtGhiChu.BackColor = Color.FloralWhite;
+            txtNoiDung.BackColor = txtGhiChu.BackColor = Color.Thistle;
         }
 
         private void btnLuu_Click(object sender, EventArgs e)
@@ -612,7 +713,7 @@ namespace TuDienChuyenNganhCyberSecurity
                                 cmd.Parameters.AddWithValue("@LINHVUC", cmbLinhVuc1.Text.Trim());
                                 cmd.ExecuteNonQuery();
                             }
-                        } 
+                        }
                     }
                     MessageBox.Show("Cập nhật từ thành công.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     isUpdate = false;
@@ -817,6 +918,8 @@ namespace TuDienChuyenNganhCyberSecurity
             colorMenu.Show(btnColorMenu, new Point(0, btnColorMenu.Height));
         }
 
+
+
         private void btnMoreColors_Click(object sender, EventArgs e)
         {
             using (ColorDialog dlg = new ColorDialog())
@@ -928,15 +1031,15 @@ namespace TuDienChuyenNganhCyberSecurity
 
             DataTable dtAfterFilterAndSort = dataView.ToTable();
 
-            
 
-            
+
+
 
             // 3. Dùng LINQ lấy dữ liệu của trang hiện tại
             var pageRows = dtAfterFilterAndSort.AsEnumerable()
                                      .Skip((currentPage - 1) * pageSize)
                                      .Take(pageSize);
-            
+
             // 4. Tạo DataTable mới cho trang này và gán vào BindingSource
             if (pageRows.Any())
             {
@@ -1019,6 +1122,34 @@ namespace TuDienChuyenNganhCyberSecurity
             {
                 e.SuppressKeyPress = true; // Tắt tiếng bíp
                 this.ActiveControl = null; // Ép Form bỏ chọn Box -> Kích hoạt sự kiện Leave bên dưới
+            }
+        }
+
+        private void btnSymbolMenu_Click_1(object sender, EventArgs e)
+        {
+            symbolMenu.Show(btnSymbolMenu, new Point(0, btnSymbolMenu.Height));
+        }
+
+        private void txtNoiDung_Leave(object sender, EventArgs e)
+        {
+            targetRtb = txtNoiDung;
+            selectionStart = targetRtb.SelectionStart;
+            selectionLength = targetRtb.SelectionLength;
+
+        }
+
+        private void txtGhiChu_Leave(object sender, EventArgs e)
+        {
+            targetRtb = txtGhiChu;
+            selectionStart = targetRtb.SelectionStart;
+            selectionLength = targetRtb.SelectionLength;
+        }
+
+        private void btnShowSymbol_Click(object sender, EventArgs e)
+        {
+            if (btnShowSymbol.Text.Trim() != "")
+            {
+                InsertSymbol(btnShowSymbol.Text);
             }
         }
     }

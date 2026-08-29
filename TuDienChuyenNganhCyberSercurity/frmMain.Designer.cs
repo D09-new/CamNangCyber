@@ -31,13 +31,13 @@
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle7 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle8 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle7 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle8 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
             flowPanel = new FlowLayoutPanel();
             btnTraCuu = new Button();
             imageList1 = new ImageList(components);
@@ -87,6 +87,9 @@
             panel4 = new Panel();
             label6 = new Label();
             panelFormatText = new Panel();
+            btnShowSymbol = new Button();
+            btnSymbolMenu = new Button();
+            label9 = new Label();
             btnShowColor = new Button();
             btnColorMenu = new Button();
             label8 = new Label();
@@ -100,6 +103,7 @@
             colorDialog1 = new ColorDialog();
             colorMenu = new ContextMenuStrip(components);
             btnMoreColors = new ToolStripMenuItem();
+            symbolMenu = new ContextMenuStrip(components);
             flowPanel.SuspendLayout();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
@@ -176,6 +180,7 @@
             imageList1.Images.SetKeyName(12, "GoToLasttPage.png");
             imageList1.Images.SetKeyName(13, "GoToNextPage.png");
             imageList1.Images.SetKeyName(14, "GoToPrePage.png");
+            imageList1.Images.SetKeyName(15, "Omega.png");
             // 
             // btnThem
             // 
@@ -317,7 +322,7 @@
             // 
             // cmbLinhVuc1
             // 
-            cmbLinhVuc1.BackColor = Color.FloralWhite;
+            cmbLinhVuc1.BackColor = Color.Thistle;
             cmbLinhVuc1.Font = new Font("Times New Roman", 11F, FontStyle.Regular, GraphicsUnit.Point, 0);
             cmbLinhVuc1.FormattingEnabled = true;
             cmbLinhVuc1.Location = new Point(1249, 3);
@@ -338,7 +343,7 @@
             // 
             // txtTuDayDu
             // 
-            txtTuDayDu.BackColor = Color.FloralWhite;
+            txtTuDayDu.BackColor = Color.Thistle;
             txtTuDayDu.Font = new Font("Times New Roman", 11F, FontStyle.Regular, GraphicsUnit.Point, 0);
             txtTuDayDu.ForeColor = Color.Black;
             txtTuDayDu.Location = new Point(547, 4);
@@ -349,7 +354,7 @@
             // 
             // txtTuVietTat
             // 
-            txtTuVietTat.BackColor = Color.FloralWhite;
+            txtTuVietTat.BackColor = Color.Thistle;
             txtTuVietTat.Font = new Font("Times New Roman", 11F, FontStyle.Regular, GraphicsUnit.Point, 0);
             txtTuVietTat.ForeColor = Color.Black;
             txtTuVietTat.Location = new Point(110, 4);
@@ -435,7 +440,7 @@
             // 
             splitContainer1.Panel2.Controls.Add(panel5);
             splitContainer1.Panel2.Controls.Add(panel3);
-            splitContainer1.Size = new Size(1924, 650);
+            splitContainer1.Size = new Size(1924, 797);
             splitContainer1.SplitterDistance = 822;
             splitContainer1.TabIndex = 100;
             splitContainer1.TabStop = false;
@@ -462,20 +467,20 @@
             dgvDSTU.Location = new Point(0, 84);
             dgvDSTU.Name = "dgvDSTU";
             dgvDSTU.ReadOnly = true;
-            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle5.BackColor = SystemColors.Control;
-            dataGridViewCellStyle5.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle5.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle5.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle5.SelectionForeColor = Color.White;
-            dataGridViewCellStyle5.WrapMode = DataGridViewTriState.True;
-            dgvDSTU.RowHeadersDefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle7.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle7.BackColor = SystemColors.Control;
+            dataGridViewCellStyle7.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle7.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle7.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle7.SelectionForeColor = Color.White;
+            dataGridViewCellStyle7.WrapMode = DataGridViewTriState.True;
+            dgvDSTU.RowHeadersDefaultCellStyle = dataGridViewCellStyle7;
             dgvDSTU.RowHeadersWidth = 51;
-            dataGridViewCellStyle6.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle6.SelectionForeColor = Color.White;
-            dgvDSTU.RowsDefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle8.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle8.SelectionForeColor = Color.White;
+            dgvDSTU.RowsDefaultCellStyle = dataGridViewCellStyle8;
             dgvDSTU.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvDSTU.Size = new Size(822, 522);
+            dgvDSTU.Size = new Size(822, 669);
             dgvDSTU.TabIndex = 101;
             dgvDSTU.SelectionChanged += dgvDSTU_SelectionChanged;
             // 
@@ -548,31 +553,31 @@
             // 
             // CreatedDate
             // 
-            dataGridViewCellStyle7.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle7.Font = new Font("Times New Roman", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle7.ForeColor = Color.Black;
-            CreatedDate.DefaultCellStyle = dataGridViewCellStyle7;
             CreatedDate.DataPropertyName = "CreatedDate";
-            CreatedDate.HeaderText = "CreatedDate";
-            CreatedDate.Width = 110;
+            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle5.Font = new Font("Times New Roman", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle5.ForeColor = Color.Black;
+            CreatedDate.DefaultCellStyle = dataGridViewCellStyle5;
+            CreatedDate.HeaderText = "Ngày tạo";
+            CreatedDate.MinimumWidth = 6;
             CreatedDate.Name = "CreatedDate";
             CreatedDate.ReadOnly = true;
-            CreatedDate.Visible = false;
             CreatedDate.Resizable = DataGridViewTriState.False;
+            CreatedDate.Visible = false;
             // 
             // ModifiedDate
             // 
-            dataGridViewCellStyle8.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle8.Font = new Font("Times New Roman", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle8.ForeColor = Color.Black;
-            ModifiedDate.DefaultCellStyle = dataGridViewCellStyle8;
             ModifiedDate.DataPropertyName = "ModifiedDate";
-            ModifiedDate.HeaderText = "ModifiedDate";
-            ModifiedDate.Width = 130;
+            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle6.Font = new Font("Times New Roman", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle6.ForeColor = Color.Black;
+            ModifiedDate.DefaultCellStyle = dataGridViewCellStyle6;
+            ModifiedDate.HeaderText = "Ngày sửa";
+            ModifiedDate.MinimumWidth = 6;
             ModifiedDate.Name = "ModifiedDate";
             ModifiedDate.ReadOnly = true;
-            ModifiedDate.Visible = false;
             ModifiedDate.Resizable = DataGridViewTriState.False;
+            ModifiedDate.Visible = false;
             // 
             // panel6
             // 
@@ -585,7 +590,7 @@
             panel6.Controls.Add(txtPage);
             panel6.Dock = DockStyle.Bottom;
             panel6.Font = new Font("Times New Roman", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            panel6.Location = new Point(0, 606);
+            panel6.Location = new Point(0, 753);
             panel6.Name = "panel6";
             panel6.Size = new Size(822, 44);
             panel6.TabIndex = 103;
@@ -747,7 +752,7 @@
             panel5.Dock = DockStyle.Fill;
             panel5.Location = new Point(0, 40);
             panel5.Name = "panel5";
-            panel5.Size = new Size(1098, 610);
+            panel5.Size = new Size(1098, 757);
             panel5.TabIndex = 102;
             // 
             // txtGhiChu
@@ -757,10 +762,11 @@
             txtGhiChu.Font = new Font("Times New Roman", 13.2000008F, FontStyle.Regular, GraphicsUnit.Point, 0);
             txtGhiChu.Location = new Point(0, 419);
             txtGhiChu.Name = "txtGhiChu";
-            txtGhiChu.Size = new Size(1098, 191);
+            txtGhiChu.Size = new Size(1098, 338);
             txtGhiChu.TabIndex = 5;
             txtGhiChu.Text = "";
             txtGhiChu.KeyDown += txtGhiChu_KeyDown;
+            txtGhiChu.Leave += txtGhiChu_Leave;
             // 
             // panel4
             // 
@@ -789,6 +795,9 @@
             // 
             panelFormatText.BackColor = SystemColors.GradientActiveCaption;
             panelFormatText.BorderStyle = BorderStyle.Fixed3D;
+            panelFormatText.Controls.Add(btnShowSymbol);
+            panelFormatText.Controls.Add(btnSymbolMenu);
+            panelFormatText.Controls.Add(label9);
             panelFormatText.Controls.Add(btnShowColor);
             panelFormatText.Controls.Add(btnColorMenu);
             panelFormatText.Controls.Add(label8);
@@ -803,11 +812,55 @@
             panelFormatText.TabIndex = 6;
             panelFormatText.Visible = false;
             // 
+            // btnShowSymbol
+            // 
+            btnShowSymbol.Anchor = AnchorStyles.None;
+            btnShowSymbol.BackColor = Color.MediumAquamarine;
+            btnShowSymbol.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnShowSymbol.ForeColor = SystemColors.ActiveCaptionText;
+            btnShowSymbol.ImageList = imageList1;
+            btnShowSymbol.Location = new Point(559, 6);
+            btnShowSymbol.Name = "btnShowSymbol";
+            btnShowSymbol.Size = new Size(35, 29);
+            btnShowSymbol.TabIndex = 108;
+            btnShowSymbol.TextImageRelation = TextImageRelation.ImageBeforeText;
+            btnShowSymbol.UseVisualStyleBackColor = false;
+            btnShowSymbol.Click += btnShowSymbol_Click;
+            // 
+            // btnSymbolMenu
+            // 
+            btnSymbolMenu.Anchor = AnchorStyles.None;
+            btnSymbolMenu.BackColor = Color.Pink;
+            btnSymbolMenu.Font = new Font("Times New Roman", 10.8F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            btnSymbolMenu.ForeColor = SystemColors.ActiveCaptionText;
+            btnSymbolMenu.ImageIndex = 15;
+            btnSymbolMenu.ImageList = imageList1;
+            btnSymbolMenu.Location = new Point(524, 6);
+            btnSymbolMenu.Name = "btnSymbolMenu";
+            btnSymbolMenu.Size = new Size(35, 29);
+            btnSymbolMenu.TabIndex = 107;
+            btnSymbolMenu.TextAlign = ContentAlignment.MiddleRight;
+            btnSymbolMenu.TextImageRelation = TextImageRelation.ImageBeforeText;
+            btnSymbolMenu.UseVisualStyleBackColor = false;
+            btnSymbolMenu.Click += btnSymbolMenu_Click_1;
+            // 
+            // label9
+            // 
+            label9.Anchor = AnchorStyles.None;
+            label9.AutoSize = true;
+            label9.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label9.Location = new Point(391, 9);
+            label9.Name = "label9";
+            label9.Size = new Size(127, 23);
+            label9.TabIndex = 106;
+            label9.Text = "Ký tự đặc biệt:";
+            // 
             // btnShowColor
             // 
+            btnShowColor.Anchor = AnchorStyles.None;
             btnShowColor.BackColor = Color.Black;
             btnShowColor.Font = new Font("Times New Roman", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnShowColor.Location = new Point(347, 5);
+            btnShowColor.Location = new Point(338, 5);
             btnShowColor.Name = "btnShowColor";
             btnShowColor.Size = new Size(35, 29);
             btnShowColor.TabIndex = 105;
@@ -817,12 +870,13 @@
             // 
             // btnColorMenu
             // 
-            btnColorMenu.BackColor = Color.White;
+            btnColorMenu.Anchor = AnchorStyles.None;
+            btnColorMenu.BackColor = Color.Pink;
             btnColorMenu.Font = new Font("Times New Roman", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             btnColorMenu.ForeColor = SystemColors.ActiveCaptionText;
             btnColorMenu.ImageIndex = 10;
             btnColorMenu.ImageList = imageList1;
-            btnColorMenu.Location = new Point(312, 5);
+            btnColorMenu.Location = new Point(303, 5);
             btnColorMenu.Name = "btnColorMenu";
             btnColorMenu.Size = new Size(35, 29);
             btnColorMenu.TabIndex = 104;
@@ -833,9 +887,10 @@
             // 
             // label8
             // 
+            label8.Anchor = AnchorStyles.None;
             label8.AutoSize = true;
             label8.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label8.Location = new Point(222, 9);
+            label8.Location = new Point(213, 9);
             label8.Name = "label8";
             label8.Size = new Size(84, 23);
             label8.TabIndex = 103;
@@ -843,6 +898,7 @@
             // 
             // label7
             // 
+            label7.Anchor = AnchorStyles.None;
             label7.AutoSize = true;
             label7.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label7.Location = new Point(3, 8);
@@ -853,7 +909,8 @@
             // 
             // btnItalic
             // 
-            btnItalic.BackColor = Color.White;
+            btnItalic.Anchor = AnchorStyles.None;
+            btnItalic.BackColor = Color.Pink;
             btnItalic.Font = new Font("Times New Roman", 10.8F, FontStyle.Italic, GraphicsUnit.Point, 0);
             btnItalic.Location = new Point(159, 5);
             btnItalic.Name = "btnItalic";
@@ -865,7 +922,8 @@
             // 
             // btnUnderline
             // 
-            btnUnderline.BackColor = Color.White;
+            btnUnderline.Anchor = AnchorStyles.None;
+            btnUnderline.BackColor = Color.Pink;
             btnUnderline.Font = new Font("Times New Roman", 10.8F, FontStyle.Underline, GraphicsUnit.Point, 0);
             btnUnderline.Location = new Point(125, 5);
             btnUnderline.Name = "btnUnderline";
@@ -877,7 +935,8 @@
             // 
             // btnBold
             // 
-            btnBold.BackColor = Color.White;
+            btnBold.Anchor = AnchorStyles.None;
+            btnBold.BackColor = Color.Pink;
             btnBold.Font = new Font("Times New Roman", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnBold.Location = new Point(91, 5);
             btnBold.Name = "btnBold";
@@ -898,6 +957,7 @@
             txtNoiDung.TabIndex = 4;
             txtNoiDung.Text = "";
             txtNoiDung.KeyDown += txtNoiDung_KeyDown;
+            txtNoiDung.Leave += txtNoiDung_Leave;
             // 
             // panel3
             // 
@@ -936,11 +996,17 @@
             btnMoreColors.Text = "More colors...";
             btnMoreColors.Click += btnMoreColors_Click;
             // 
+            // symbolMenu
+            // 
+            symbolMenu.ImageScalingSize = new Size(20, 20);
+            symbolMenu.Name = "symbolMenu";
+            symbolMenu.Size = new Size(61, 4);
+            // 
             // frmMain
             // 
             AutoScaleDimensions = new SizeF(11F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1924, 740);
+            ClientSize = new Size(1924, 887);
             Controls.Add(splitContainer1);
             Controls.Add(panel1);
             Controls.Add(flowPanel);
@@ -1041,5 +1107,9 @@
         private Button btnPrePage;
         private Button btnLastPage;
         private Button btnNextPage;
+        private Label label9;
+        private Button btnSymbolMenu;
+        private Button btnShowSymbol;
+        private ContextMenuStrip symbolMenu;
     }
 }
