@@ -257,7 +257,7 @@ namespace TuDienChuyenNganhCyberSecurity
                 targetRtb.SelectionLength = selectionLength;
                 targetRtb.SelectedText = symbol;
                 targetRtb.SelectionStart = selectionStart + symbol.Length;
-                targetRtb.SelectionLength = 0;  
+                targetRtb.SelectionLength = 0;
                 targetRtb.Focus();
             }
             else
@@ -394,7 +394,7 @@ namespace TuDienChuyenNganhCyberSecurity
             try
             {
                 isLoading = true;
-                if(isAdd || isUpdate)
+                if (isAdd || isUpdate)
                 {
                     linhvuc = cmbLinhVuc.SelectedValue.ToString();
                 }
@@ -1154,6 +1154,22 @@ namespace TuDienChuyenNganhCyberSecurity
             if (btnShowSymbol.Text.Trim() != "")
             {
                 InsertSymbol(btnShowSymbol.Text);
+            }
+        }
+
+        private void frmMain_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (isAdd || isUpdate)
+            {
+                if (e.Control && e.KeyCode == Keys.S)
+                {
+                    // Ngăn chặn tiếng "ting" mặc định của hệ thống khi nhấn phím tắt
+                    e.SuppressKeyPress = true;
+
+                    // Gọi hàm lưu của bạn (truyền sender và e hợp lệ)
+                    btnLuu_Click(sender, e);
+                    this.ActiveControl = null;
+                }
             }
         }
     }
