@@ -536,6 +536,7 @@ namespace TuDienChuyenNganhCyberSecurity
             txtNoiDung.ReadOnly = false;
             panelFormatText.Visible = lbLinhVuc.Visible = cmbLinhVuc1.Visible = lbTuDayDu.Visible = txtTuDayDu.Visible = lbTuVietTat.Visible = txtTuVietTat.Visible = true;
             txtNoiDung.BackColor = txtGhiChu.BackColor = Color.Thistle;
+            txtTuVietTat.Focus();
         }
         private void btnCapNhat_Click(object sender, EventArgs e)
         {
@@ -963,7 +964,7 @@ namespace TuDienChuyenNganhCyberSecurity
                 // Chỉ đổi màu đoạn văn bản đang được chọn
                 txtGhiChu.SelectionColor = btnShowColor.BackColor;
             }
-            else if (txtNoiDung.SelectionLength > 0)
+            if (txtNoiDung.SelectionLength > 0)
             {
                 txtNoiDung.SelectionColor = btnShowColor.BackColor;
             }
@@ -1170,6 +1171,39 @@ namespace TuDienChuyenNganhCyberSecurity
                     btnLuu_Click(sender, e);
                     this.ActiveControl = null;
                 }
+            }
+            else
+            {
+                if (e.Alt && e.KeyCode == Keys.Oemplus)
+                {
+                    e.SuppressKeyPress = true;
+                    btnThem_Click(sender, e);
+                    e.Handled = true;
+                }
+                if (e.Alt && e.KeyCode == Keys.U)
+                {
+                    e.SuppressKeyPress = true;
+                    btnCapNhat_Click(sender, e);
+                    e.Handled = true;
+                }
+            }
+        }
+
+        private void cmbLinhVuc1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Tab)
+            {
+                e.SuppressKeyPress = true; // Tắt tiếng bíp
+                txtNoiDung.Focus(); // Chuyển focus sang RichTextBox txtNoiDung
+            }
+        }
+
+        private void cmbLinhVuc1_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            // Báo cho hệ thống biết phím Tab/Enter sẽ được xử lý như một phím bấm thông thường
+            if (e.KeyCode == Keys.Tab || e.KeyCode == Keys.Enter)
+            {
+                e.IsInputKey = true;
             }
         }
     }

@@ -30,14 +30,14 @@
         {
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
-            DataGridViewCellStyle dataGridViewCellStyle9 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle15 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle16 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle10 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle11 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle12 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle13 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle14 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle7 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle8 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
             flowPanel = new FlowLayoutPanel();
             btnTraCuu = new Button();
             imageList1 = new ImageList(components);
@@ -330,6 +330,8 @@
             cmbLinhVuc1.Size = new Size(247, 28);
             cmbLinhVuc1.TabIndex = 3;
             cmbLinhVuc1.Visible = false;
+            cmbLinhVuc1.KeyDown += cmbLinhVuc1_KeyDown;
+            cmbLinhVuc1.PreviewKeyDown += cmbLinhVuc1_PreviewKeyDown;
             // 
             // lbLinhVuc
             // 
@@ -452,14 +454,14 @@
             dgvDSTU.BackgroundColor = SystemColors.GradientInactiveCaption;
             dgvDSTU.BorderStyle = BorderStyle.Fixed3D;
             dgvDSTU.CellBorderStyle = DataGridViewCellBorderStyle.Raised;
-            dataGridViewCellStyle9.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle9.BackColor = Color.LightSkyBlue;
-            dataGridViewCellStyle9.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle9.ForeColor = Color.Black;
-            dataGridViewCellStyle9.SelectionBackColor = Color.LightSkyBlue;
-            dataGridViewCellStyle9.SelectionForeColor = Color.White;
-            dataGridViewCellStyle9.WrapMode = DataGridViewTriState.True;
-            dgvDSTU.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle9;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.BackColor = Color.LightSkyBlue;
+            dataGridViewCellStyle1.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle1.ForeColor = Color.Black;
+            dataGridViewCellStyle1.SelectionBackColor = Color.LightSkyBlue;
+            dataGridViewCellStyle1.SelectionForeColor = Color.White;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            dgvDSTU.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             dgvDSTU.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvDSTU.Columns.AddRange(new DataGridViewColumn[] { ID, TUVIETTAT, TUDAYDU, NOIDUNG, GHICHU, LINHVUC, CreatedDate, ModifiedDate });
             dgvDSTU.Dock = DockStyle.Fill;
@@ -467,18 +469,18 @@
             dgvDSTU.Location = new Point(0, 84);
             dgvDSTU.Name = "dgvDSTU";
             dgvDSTU.ReadOnly = true;
-            dataGridViewCellStyle15.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle15.BackColor = SystemColors.Control;
-            dataGridViewCellStyle15.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle15.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle15.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle15.SelectionForeColor = Color.White;
-            dataGridViewCellStyle15.WrapMode = DataGridViewTriState.True;
-            dgvDSTU.RowHeadersDefaultCellStyle = dataGridViewCellStyle15;
+            dataGridViewCellStyle7.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle7.BackColor = SystemColors.Control;
+            dataGridViewCellStyle7.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle7.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle7.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle7.SelectionForeColor = Color.White;
+            dataGridViewCellStyle7.WrapMode = DataGridViewTriState.True;
+            dgvDSTU.RowHeadersDefaultCellStyle = dataGridViewCellStyle7;
             dgvDSTU.RowHeadersWidth = 51;
-            dataGridViewCellStyle16.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle16.SelectionForeColor = Color.White;
-            dgvDSTU.RowsDefaultCellStyle = dataGridViewCellStyle16;
+            dataGridViewCellStyle8.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle8.SelectionForeColor = Color.White;
+            dgvDSTU.RowsDefaultCellStyle = dataGridViewCellStyle8;
             dgvDSTU.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvDSTU.Size = new Size(822, 669);
             dgvDSTU.TabIndex = 101;
@@ -497,10 +499,10 @@
             // TUVIETTAT
             // 
             TUVIETTAT.DataPropertyName = "TUVIETTAT";
-            dataGridViewCellStyle10.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle10.Font = new Font("Times New Roman", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle10.ForeColor = Color.Black;
-            TUVIETTAT.DefaultCellStyle = dataGridViewCellStyle10;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.Font = new Font("Times New Roman", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle2.ForeColor = Color.Black;
+            TUVIETTAT.DefaultCellStyle = dataGridViewCellStyle2;
             TUVIETTAT.FillWeight = 50F;
             TUVIETTAT.HeaderText = "Từ viết tắt";
             TUVIETTAT.MinimumWidth = 6;
@@ -510,10 +512,10 @@
             // TUDAYDU
             // 
             TUDAYDU.DataPropertyName = "TUDAYDU";
-            dataGridViewCellStyle11.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle11.Font = new Font("Times New Roman", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle11.ForeColor = Color.Black;
-            TUDAYDU.DefaultCellStyle = dataGridViewCellStyle11;
+            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.Font = new Font("Times New Roman", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle3.ForeColor = Color.Black;
+            TUDAYDU.DefaultCellStyle = dataGridViewCellStyle3;
             TUDAYDU.FillWeight = 125F;
             TUDAYDU.HeaderText = "Từ đầy đủ";
             TUDAYDU.MinimumWidth = 6;
@@ -541,10 +543,10 @@
             // LINHVUC
             // 
             LINHVUC.DataPropertyName = "LINHVUC";
-            dataGridViewCellStyle12.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle12.Font = new Font("Times New Roman", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle12.ForeColor = Color.Black;
-            LINHVUC.DefaultCellStyle = dataGridViewCellStyle12;
+            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.Font = new Font("Times New Roman", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle4.ForeColor = Color.Black;
+            LINHVUC.DefaultCellStyle = dataGridViewCellStyle4;
             LINHVUC.FillWeight = 60F;
             LINHVUC.HeaderText = "Lĩnh vực";
             LINHVUC.MinimumWidth = 6;
@@ -554,10 +556,10 @@
             // CreatedDate
             // 
             CreatedDate.DataPropertyName = "CreatedDate";
-            dataGridViewCellStyle13.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle13.Font = new Font("Times New Roman", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle13.ForeColor = Color.Black;
-            CreatedDate.DefaultCellStyle = dataGridViewCellStyle13;
+            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle5.Font = new Font("Times New Roman", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle5.ForeColor = Color.Black;
+            CreatedDate.DefaultCellStyle = dataGridViewCellStyle5;
             CreatedDate.HeaderText = "Ngày tạo";
             CreatedDate.MinimumWidth = 6;
             CreatedDate.Name = "CreatedDate";
@@ -568,10 +570,10 @@
             // ModifiedDate
             // 
             ModifiedDate.DataPropertyName = "ModifiedDate";
-            dataGridViewCellStyle14.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle14.Font = new Font("Times New Roman", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle14.ForeColor = Color.Black;
-            ModifiedDate.DefaultCellStyle = dataGridViewCellStyle14;
+            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle6.Font = new Font("Times New Roman", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle6.ForeColor = Color.Black;
+            ModifiedDate.DefaultCellStyle = dataGridViewCellStyle6;
             ModifiedDate.HeaderText = "Ngày sửa";
             ModifiedDate.MinimumWidth = 6;
             ModifiedDate.Name = "ModifiedDate";
@@ -654,8 +656,9 @@
             txtPage.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             txtPage.Location = new Point(375, 5);
             txtPage.Name = "txtPage";
+            txtPage.ReadOnly = true;
             txtPage.Size = new Size(66, 30);
-            txtPage.TabIndex = 1;
+            txtPage.TabIndex = 100;
             txtPage.TextAlign = HorizontalAlignment.Center;
             txtPage.KeyDown += txtPage_KeyDown;
             txtPage.Leave += txtPage_Leave;
@@ -763,7 +766,7 @@
             txtGhiChu.Location = new Point(0, 419);
             txtGhiChu.Name = "txtGhiChu";
             txtGhiChu.Size = new Size(1098, 338);
-            txtGhiChu.TabIndex = 5;
+            txtGhiChu.TabIndex = 4;
             txtGhiChu.Text = "";
             txtGhiChu.KeyDown += txtGhiChu_KeyDown;
             txtGhiChu.Leave += txtGhiChu_Leave;
@@ -954,7 +957,7 @@
             txtNoiDung.Location = new Point(0, 0);
             txtNoiDung.Name = "txtNoiDung";
             txtNoiDung.Size = new Size(1098, 331);
-            txtNoiDung.TabIndex = 4;
+            txtNoiDung.TabIndex = 3;
             txtNoiDung.Text = "";
             txtNoiDung.KeyDown += txtNoiDung_KeyDown;
             txtNoiDung.Leave += txtNoiDung_Leave;
