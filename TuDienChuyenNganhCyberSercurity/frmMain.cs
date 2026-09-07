@@ -290,6 +290,7 @@ namespace TuDienChuyenNganhCyberSecurity
                     btnTraCuu.Text = "Kết thúc tra cứu";
                     lbTuDayDu.Visible = cmbTuDayDu.Visible = lbTuVietTat.Visible = cmbTuVietTat.Visible = true;
                     btnThem.Enabled = btnLuu.Enabled = btnXoa.Enabled = dgvDSTU.Enabled = false;
+                    cmbTuVietTat.Focus();
                 }
             }
             catch (Exception)
@@ -548,6 +549,7 @@ namespace TuDienChuyenNganhCyberSecurity
             if (isSearching && (cmbTuVietTat.SelectedIndex == -1 || cmbTuDayDu.SelectedIndex == -1))
             {
                 MessageBox.Show("Vui lòng chọn từ cần cập nhật.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                cmbTuVietTat.Focus();
                 return;
             }
             if (isSearching)
@@ -567,11 +569,11 @@ namespace TuDienChuyenNganhCyberSecurity
                 cmbLinhVuc1.SelectedValue = row["LINHVUC"];
             }
             isUpdate = true;
-            txtTuVietTat.Focus();
             panelLoc.Visible = dgvDSTU.Enabled = btnTraCuu.Enabled = btnThem.Enabled = btnTaiLai.Enabled = btnXoa.Enabled = btnThoat.Enabled = false;
             txtGhiChu.ReadOnly = false;
             txtNoiDung.ReadOnly = false;
             panelFormatText.Visible = lbLinhVuc.Visible = cmbLinhVuc1.Visible = lbTuDayDu.Visible = txtTuDayDu.Visible = lbTuVietTat.Visible = txtTuVietTat.Visible = true;
+            txtTuVietTat.Focus();
             txtNoiDung.BackColor = txtGhiChu.BackColor = Color.Thistle;
         }
 
@@ -1185,9 +1187,10 @@ namespace TuDienChuyenNganhCyberSecurity
 
         private void frmMain_KeyDown(object sender, KeyEventArgs e)
         {
-            if (isAdd || isUpdate)
+
+            if (e.Control && e.KeyCode == Keys.S)
             {
-                if (e.Control && e.KeyCode == Keys.S)
+                if (isAdd || isUpdate)
                 {
                     // Ngăn chặn tiếng "ting" mặc định của hệ thống khi nhấn phím tắt
                     e.SuppressKeyPress = true;
@@ -1197,18 +1200,43 @@ namespace TuDienChuyenNganhCyberSecurity
                     this.ActiveControl = null;
                 }
             }
-            else
+
+            if (e.Control && e.KeyCode == Keys.Oemplus) //them tu
             {
-                if (e.Alt && e.KeyCode == Keys.Oemplus)
+                if(!isUpdate && !isSearching && !isAdd)
                 {
                     e.SuppressKeyPress = true;
                     btnThem_Click(sender, e);
                     e.Handled = true;
                 }
-                if (e.Alt && e.KeyCode == Keys.U)
+            }
+
+            if (e.Control && e.KeyCode == Keys.U) //chinh sua tu
+            {
+                if (!isAdd && !isUpdate)
                 {
                     e.SuppressKeyPress = true;
                     btnCapNhat_Click(sender, e);
+                    e.Handled = true;
+                } 
+            }
+
+            if (e.Control && e.KeyCode == Keys.F) //tra cuu tu
+            {
+                if(!isAdd && !isUpdate && !isSearching)
+                {
+                    e.SuppressKeyPress = true;
+                    btnTraCuu_Click(sender, e);
+                    e.Handled = true;
+                }
+            }
+
+            if (e.KeyCode == Keys.Escape) //Thoat khi dang tra cuu/them/sua
+            {
+                if(isAdd || isUpdate || isSearching)
+                {
+                    e.SuppressKeyPress = true;
+                    btnPhucHoi_Click(sender, e);
                     e.Handled = true;
                 }
             }
