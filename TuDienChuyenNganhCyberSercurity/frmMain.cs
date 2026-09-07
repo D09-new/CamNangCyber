@@ -394,6 +394,10 @@ namespace TuDienChuyenNganhCyberSecurity
             try
             {
                 isLoading = true;
+                if(isAdd || isUpdate)
+                {
+                    linhvuc = cmbLinhVuc.SelectedValue.ToString();
+                }
                 using (var connection = new SQLiteConnection(Program.connectionString))
                 {
                     connection.Open();
@@ -619,8 +623,8 @@ namespace TuDienChuyenNganhCyberSecurity
                         }
                     }
                     MessageBox.Show("Thêm từ mới thành công.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    isAdd = false;
                     Reload();
+                    isAdd = false;
                     txtGhiChu.ReadOnly = true;
                     txtNoiDung.ReadOnly = true;
                     panelLoc.Visible = dgvDSTU.Enabled = btnTraCuu.Enabled = btnCapNhat.Enabled = btnTaiLai.Enabled = btnXoa.Enabled = btnThoat.Enabled = true;
@@ -716,8 +720,8 @@ namespace TuDienChuyenNganhCyberSecurity
                         }
                     }
                     MessageBox.Show("Cập nhật từ thành công.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    isUpdate = false;
                     Reload();
+                    isUpdate = false;
                     txtGhiChu.ReadOnly = true;
                     txtNoiDung.ReadOnly = true;
                     panelLoc.Visible = dgvDSTU.Enabled = btnTraCuu.Enabled = btnThem.Enabled = btnTaiLai.Enabled = btnXoa.Enabled = btnThoat.Enabled = true;
