@@ -353,6 +353,7 @@
             txtTuDayDu.Size = new Size(579, 29);
             txtTuDayDu.TabIndex = 2;
             txtTuDayDu.Visible = false;
+            txtTuDayDu.KeyDown += txtTuDayDu_KeyDown;
             // 
             // txtTuVietTat
             // 
@@ -364,6 +365,7 @@
             txtTuVietTat.Size = new Size(304, 29);
             txtTuVietTat.TabIndex = 1;
             txtTuVietTat.Visible = false;
+            txtTuVietTat.KeyDown += txtTuVietTat_KeyDown;
             // 
             // lbTuVietTat
             // 

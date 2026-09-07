@@ -567,6 +567,7 @@ namespace TuDienChuyenNganhCyberSecurity
                 cmbLinhVuc1.SelectedValue = row["LINHVUC"];
             }
             isUpdate = true;
+            txtTuVietTat.Focus();
             panelLoc.Visible = dgvDSTU.Enabled = btnTraCuu.Enabled = btnThem.Enabled = btnTaiLai.Enabled = btnXoa.Enabled = btnThoat.Enabled = false;
             txtGhiChu.ReadOnly = false;
             txtNoiDung.ReadOnly = false;
@@ -815,6 +816,18 @@ namespace TuDienChuyenNganhCyberSecurity
 
                 btnItalic.PerformClick();    // Gọi lại sự kiện Click của nút bấm
             }
+            if ((e.Alt && e.KeyCode == Keys.Right) || (e.Alt && e.KeyCode == Keys.Down))
+            {
+                e.SuppressKeyPress = true; // Chặn tiếng "bíp" của hệ thống Windows
+                txtGhiChu.Focus();
+                e.Handled = true;
+            }
+            if ((e.Alt && e.KeyCode == Keys.Left) || (e.Alt && e.KeyCode == Keys.Up))
+            {
+                e.SuppressKeyPress = true; // Chặn tiếng "bíp" của hệ thống Windows
+                cmbLinhVuc1.Focus();
+                e.Handled = true;
+            }
         }
 
         private void txtGhiChu_KeyDown(object sender, KeyEventArgs e)
@@ -851,6 +864,18 @@ namespace TuDienChuyenNganhCyberSecurity
                 e.SuppressKeyPress = true; // Chặn tiếng "bíp" của hệ thống Windows
 
                 btnItalic.PerformClick();    // Gọi lại sự kiện Click của nút bấm
+            }
+            if ((e.Alt && e.KeyCode == Keys.Right) || (e.Alt && e.KeyCode == Keys.Down))
+            {
+                e.SuppressKeyPress = true; // Chặn tiếng "bíp" của hệ thống Windows
+                txtTuVietTat.Focus();
+                e.Handled = true;
+            }
+            if ((e.Alt && e.KeyCode == Keys.Left) || (e.Alt && e.KeyCode == Keys.Up))
+            {
+                e.SuppressKeyPress = true; // Chặn tiếng "bíp" của hệ thống Windows
+                txtNoiDung.Focus();
+                e.Handled = true;
             }
         }
 
@@ -1196,14 +1221,58 @@ namespace TuDienChuyenNganhCyberSecurity
                 e.SuppressKeyPress = true; // Tắt tiếng bíp
                 txtNoiDung.Focus(); // Chuyển focus sang RichTextBox txtNoiDung
             }
+            else if (e.Alt && e.KeyCode == Keys.Left)
+            {
+                e.SuppressKeyPress = true; // Tắt tiếng bíp
+                txtTuDayDu.Focus(); // Chuyển focus sang TextBox txtTuDayDu
+                e.Handled = true; // Ngăn chặn sự kiện mặc định của phím Alt + Left Arrow
+            }
+            else if ((e.Alt && e.KeyCode == Keys.Right) || (e.Alt && e.KeyCode == Keys.Down))
+            {
+                e.SuppressKeyPress = true; // Tắt tiếng bíp
+                txtNoiDung.Focus(); // Chuyển focus sang RichTextBox txtGhiChu
+                e.Handled = true; // Ngăn chặn sự kiện mặc định của phím Alt + Right Arrow
+            }
         }
 
         private void cmbLinhVuc1_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
         {
             // Báo cho hệ thống biết phím Tab/Enter sẽ được xử lý như một phím bấm thông thường
-            if (e.KeyCode == Keys.Tab || e.KeyCode == Keys.Enter)
+            if (e.KeyCode == Keys.Tab || e.KeyCode == Keys.Enter || e.KeyCode == Keys.Left || e.KeyCode == Keys.Right)
             {
                 e.IsInputKey = true;
+            }
+        }
+
+        private void txtTuVietTat_KeyDown(object sender, KeyEventArgs e)
+        {
+            if ((e.Alt && e.KeyCode == Keys.Left) || (e.Alt && e.KeyCode == Keys.Down))
+            {
+                e.SuppressKeyPress = true; // Tắt tiếng bíp
+                txtGhiChu.Focus();
+                e.Handled = true; // Ngăn chặn sự kiện mặc định của phím Alt + Left Arrow
+            }
+            else if ((e.Alt && e.KeyCode == Keys.Right) || (e.Alt && e.KeyCode == Keys.Up))
+            {
+                e.SuppressKeyPress = true; // Tắt tiếng bíp
+                txtTuDayDu.Focus();
+                e.Handled = true; // Ngăn chặn sự kiện mặc định của phím Alt + Right Arrow
+            }
+        }
+
+        private void txtTuDayDu_KeyDown(object sender, KeyEventArgs e)
+        {
+            if ((e.Alt && e.KeyCode == Keys.Left) || (e.Alt && e.KeyCode == Keys.Down))
+            {
+                e.SuppressKeyPress = true; // Tắt tiếng bíp
+                txtTuVietTat.Focus();
+                e.Handled = true; // Ngăn chặn sự kiện mặc định của phím Alt + Left Arrow
+            }
+            else if ((e.Alt && e.KeyCode == Keys.Right) || (e.Alt && e.KeyCode == Keys.Up))
+            {
+                e.SuppressKeyPress = true; // Tắt tiếng bíp
+                cmbLinhVuc1.Focus();
+                e.Handled = true; // Ngăn chặn sự kiện mặc định của phím Alt + Right Arrow
             }
         }
     }
