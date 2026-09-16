@@ -13,7 +13,12 @@ namespace TuDienChuyenNganhCyberSecurity
         public static BindingSource bds_dstu = new BindingSource();
         public static BindingSource bds_dslinhvuc = new BindingSource();
         public static BindingSource bds_dslinhvuc1 = new BindingSource();
+        public static BindingSource bds_dsbuoihocfrom = new BindingSource();
+        public static BindingSource bds_dsbuoihocto = new BindingSource();
+        public static BindingSource bds_dskhoahoc = new BindingSource();
+        public static BindingSource bds_dskhoahoc1 = new BindingSource();
         int position = 0;
+        int buoiHocMax = 0;
         bool isAdd = false;
         bool isUpdate = false;
         bool isLoading = false;
@@ -38,6 +43,14 @@ namespace TuDienChuyenNganhCyberSecurity
             cmbLinhVuc.AutoCompleteSource = AutoCompleteSource.ListItems;
             cmbLinhVuc1.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
             cmbLinhVuc1.AutoCompleteSource = AutoCompleteSource.ListItems;
+            cmbKhoaHoc.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            cmbKhoaHoc.AutoCompleteSource = AutoCompleteSource.ListItems;
+            cmbKhoaHoc1.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            cmbKhoaHoc1.AutoCompleteSource = AutoCompleteSource.ListItems;
+            cmbFrom.AutoCompleteMode = AutoCompleteMode.Suggest;
+            cmbFrom.AutoCompleteSource = AutoCompleteSource.ListItems;
+            cmbTo.AutoCompleteMode = AutoCompleteMode.Suggest;
+            cmbTo.AutoCompleteSource = AutoCompleteSource.ListItems;
             lbTuDayDu.Visible = cmbTuDayDu.Visible = lbTuVietTat.Visible = cmbTuVietTat.Visible = false;
             txtNoiDung.ReadOnly = txtGhiChu.ReadOnly = true;
         }
@@ -52,6 +65,7 @@ namespace TuDienChuyenNganhCyberSecurity
                     connection.Open();
                     string query = "SELECT * FROM TUDIEN ORDER BY TUVIETTAT";
                     string query2 = "SELECT LINHVUC FROM TUDIEN GROUP BY LINHVUC";
+                    string query3 = "SELECT KHOAHOC FROM TUDIEN GROUP BY KHOAHOC";
                     using (var cmd = new SQLiteCommand(query, connection))
                     {
                         SQLiteDataAdapter da = new SQLiteDataAdapter(cmd);
@@ -88,7 +102,27 @@ namespace TuDienChuyenNganhCyberSecurity
                         cmbLinhVuc.DisplayMember = "LINHVUC";
                         cmbLinhVuc.ValueMember = "LINHVUC";
                         cmbLinhVuc.SelectedIndex = -1;
-                        cmbLinhVuc.SelectedIndex = 0;
+                    }
+                    using (var cmd3 = new SQLiteCommand(query3, connection))
+                    {
+                        DataTable dt3 = new DataTable();
+                        DataTable dt4 = new DataTable();
+                        SQLiteDataAdapter da3 = new SQLiteDataAdapter(cmd3);
+                        da3.Fill(dt3);
+                        da3.Fill(dt4);
+                        bds_dskhoahoc1.DataSource = dt4;
+                        cmbKhoaHoc1.DataSource = bds_dskhoahoc1;
+                        cmbKhoaHoc1.DisplayMember = "KHOAHOC";
+                        cmbKhoaHoc1.ValueMember = "KHOAHOC";
+                        cmbKhoaHoc1.SelectedIndex = -1;
+                        DataRow dr = dt3.NewRow();
+                        dr["KHOAHOC"] = "Tất cả";
+                        dt3.Rows.InsertAt(dr, 0);
+                        bds_dskhoahoc.DataSource = dt3;
+                        cmbKhoaHoc.DataSource = bds_dskhoahoc;
+                        cmbKhoaHoc.DisplayMember = "KHOAHOC";
+                        cmbKhoaHoc.ValueMember = "KHOAHOC";
+                        cmbKhoaHoc.SelectedIndex = 0;
                     }
                 }
                 cmbNgaySua.SelectedIndex = cmbNgayTao.SelectedIndex = 0;
@@ -100,6 +134,7 @@ namespace TuDienChuyenNganhCyberSecurity
                     cmbLinhVuc1.SelectedValue = row["LinhVuc"];
                 }
                 isLoading = false;
+                cmbLinhVuc.SelectedIndex = 0;
 
             }
             catch (SQLiteException ex)
@@ -404,6 +439,8 @@ namespace TuDienChuyenNganhCyberSecurity
                     connection.Open();
                     string query = "SELECT * FROM TUDIEN ORDER BY TUVIETTAT";
                     string query2 = "SELECT LINHVUC FROM TUDIEN GROUP BY LINHVUC";
+                    string query3 = "SELECT KHOAHOC FROM TUDIEN GROUP BY KHOAHOC";
+                    string query4 = "SELECT BUOIHOC FROM TUDIEN WHERE KHOAHOC = @KHOAHOC GROUP BY BUOIHOC";
                     using (SQLiteCommand cmd = new SQLiteCommand(query, connection))
                     {
                         SQLiteDataAdapter da = new SQLiteDataAdapter(cmd);
@@ -425,39 +462,59 @@ namespace TuDienChuyenNganhCyberSecurity
                             GanNoiDungRichTextBox(txtNoiDung, row["NoiDung"]);
                             GanNoiDungRichTextBox(txtGhiChu, row["GhiChu"]);
                         }
-                        using (SQLiteCommand cmd2 = new SQLiteCommand(query2, connection))
+                    }
+                    using (SQLiteCommand cmd2 = new SQLiteCommand(query2, connection))
+                    {
+                        DataTable dt1 = new DataTable();
+                        DataTable dt2 = new DataTable();
+                        SQLiteDataAdapter da2 = new SQLiteDataAdapter(cmd2);
+                        da2.Fill(dt1);
+                        da2.Fill(dt2);
+                        bds_dslinhvuc1.DataSource = dt2;
+                        cmbLinhVuc1.DataSource = bds_dslinhvuc1;
+                        cmbLinhVuc1.DisplayMember = "LINHVUC";
+                        cmbLinhVuc1.ValueMember = "LINHVUC";
+                        if (position != -1)
                         {
-                            DataTable dt1 = new DataTable();
-                            DataTable dt2 = new DataTable();
-                            SQLiteDataAdapter da2 = new SQLiteDataAdapter(cmd2);
-                            da2.Fill(dt1);
-                            da2.Fill(dt2);
-                            bds_dslinhvuc1.DataSource = dt2;
-                            cmbLinhVuc1.DataSource = bds_dslinhvuc1;
-                            cmbLinhVuc1.DisplayMember = "LINHVUC";
-                            cmbLinhVuc1.ValueMember = "LINHVUC";
-                            if (position != -1)
-                            {
-                                DataRowView row = bds_dstu[position] as DataRowView;
-                                cmbLinhVuc1.SelectedValue = row["LinhVuc"];
-                            }
-                            else
-                            {
-                                cmbLinhVuc1.SelectedValue = -1;
-                            }
-                            DataRow dr = dt1.NewRow();
-                            dr["LINHVUC"] = "Tất cả";
-                            dt1.Rows.InsertAt(dr, 0);
-                            bds_dslinhvuc.DataSource = dt1;
-                            cmbLinhVuc.DataSource = bds_dslinhvuc;
-                            cmbLinhVuc.DisplayMember = "LINHVUC";
-                            cmbLinhVuc.ValueMember = "LINHVUC";
-                            cmbLinhVuc.SelectedValue = linhvuc;
+                            DataRowView row = bds_dstu[position] as DataRowView;
+                            cmbLinhVuc1.SelectedValue = row["LinhVuc"];
                         }
-
+                        else
+                        {
+                            cmbLinhVuc1.SelectedValue = -1;
+                        }
+                        DataRow dr = dt1.NewRow();
+                        dr["LINHVUC"] = "Tất cả";
+                        dt1.Rows.InsertAt(dr, 0);
+                        bds_dslinhvuc.DataSource = dt1;
+                        cmbLinhVuc.DataSource = bds_dslinhvuc;
+                        cmbLinhVuc.DisplayMember = "LINHVUC";
+                        cmbLinhVuc.ValueMember = "LINHVUC";
+                    }
+                    using (var cmd3 = new SQLiteCommand(query3, connection))
+                    {
+                        DataTable dt3 = new DataTable();
+                        DataTable dt4 = new DataTable();
+                        SQLiteDataAdapter da3 = new SQLiteDataAdapter(cmd3);
+                        da3.Fill(dt3);
+                        da3.Fill(dt4);
+                        bds_dskhoahoc1.DataSource = dt4;
+                        cmbKhoaHoc1.DataSource = bds_dskhoahoc1;
+                        cmbKhoaHoc1.DisplayMember = "KHOAHOC";
+                        cmbKhoaHoc1.ValueMember = "KHOAHOC";
+                        cmbKhoaHoc1.SelectedIndex = -1;
+                        DataRow dr = dt3.NewRow();
+                        dr["KHOAHOC"] = "Tất cả";
+                        dt3.Rows.InsertAt(dr, 0);
+                        bds_dskhoahoc.DataSource = dt3;
+                        cmbKhoaHoc.DataSource = bds_dskhoahoc;
+                        cmbKhoaHoc.DisplayMember = "KHOAHOC";
+                        cmbKhoaHoc.ValueMember = "KHOAHOC";
+                        //cmbKhoaHoc.SelectedIndex = 0;
                     }
                 }
                 isLoading = false;
+                cmbLinhVuc.SelectedValue = linhvuc;
 
             }
             catch (SQLiteException ex)
@@ -484,7 +541,7 @@ namespace TuDienChuyenNganhCyberSecurity
             txtNoiDung.ReadOnly = true;
             panelLoc.Visible = true;
             txtNoiDung.BackColor = txtGhiChu.BackColor = SystemColors.GradientInactiveCaption;
-            lbLinhVuc.Visible = cmbLinhVuc1.Visible = lbTuDayDu.Visible = txtTuDayDu.Visible = lbTuVietTat.Visible = txtTuVietTat.Visible = false;
+            lbKhoaHoc.Visible = cmbKhoaHoc1.Visible = lbBuoiHoc.Visible = txtBuoiHoc.Visible = lbLinhVuc.Visible = cmbLinhVuc1.Visible = lbTuDayDu.Visible = txtTuDayDu.Visible = lbTuVietTat.Visible = txtTuVietTat.Visible = false;
             if (position != -1)
             {
                 DataRowView row = bds_dstu[position] as DataRowView;
@@ -509,9 +566,13 @@ namespace TuDienChuyenNganhCyberSecurity
             {
                 panelFormatText.Visible = false;
             }
+            cmbNgaySua.SelectedIndex = cmbNgayTao.SelectedIndex = 0;
+            kieuSapXep = "";
             isAdd = false;
             isUpdate = false;
             isSearching = false;
+            cmbLinhVuc.SelectedIndex = 0;
+            cmbKhoaHoc.SelectedIndex = 0;
         }
 
         private void btnThem_Click(object sender, EventArgs e)
@@ -530,12 +591,14 @@ namespace TuDienChuyenNganhCyberSecurity
                 cmbLinhVuc1.SelectedIndex = -1;
                 txtTuDayDu.Clear();
                 txtTuVietTat.Clear();
+                cmbKhoaHoc1.SelectedIndex = -1;
+                txtBuoiHoc.Clear();
             }
             isAdd = true;
             panelLoc.Visible = dgvDSTU.Enabled = btnTraCuu.Enabled = btnCapNhat.Enabled = btnTaiLai.Enabled = btnXoa.Enabled = btnThoat.Enabled = false;
             txtGhiChu.ReadOnly = false;
             txtNoiDung.ReadOnly = false;
-            panelFormatText.Visible = lbLinhVuc.Visible = cmbLinhVuc1.Visible = lbTuDayDu.Visible = txtTuDayDu.Visible = lbTuVietTat.Visible = txtTuVietTat.Visible = true;
+            lbKhoaHoc.Visible = cmbKhoaHoc1.Visible = lbBuoiHoc.Visible = txtBuoiHoc.Visible = panelFormatText.Visible = lbLinhVuc.Visible = cmbLinhVuc1.Visible = lbTuDayDu.Visible = txtTuDayDu.Visible = lbTuVietTat.Visible = txtTuVietTat.Visible = true;
             txtNoiDung.BackColor = txtGhiChu.BackColor = Color.Thistle;
             txtTuVietTat.Focus();
         }
@@ -560,6 +623,8 @@ namespace TuDienChuyenNganhCyberSecurity
                 tuviettat = txtTuVietTat.Text = row["TUVIETTAT"].ToString().Trim();
                 tudaydu = txtTuDayDu.Text = row["TUDAYDU"].ToString().Trim();
                 cmbLinhVuc1.SelectedValue = row["LINHVUC"];
+                txtBuoiHoc.Text = row["BUOIHOC"] == null ? null : row["BUOIHOC"].ToString().Trim();
+                cmbKhoaHoc1.SelectedValue = row["KHOAHOC"] == null ? null : row["KHOAHOC"].ToString().Trim();
             }
             else
             {
@@ -567,12 +632,14 @@ namespace TuDienChuyenNganhCyberSecurity
                 tuviettat = txtTuVietTat.Text = row["TUVIETTAT"].ToString().Trim();
                 tudaydu = txtTuDayDu.Text = row["TUDAYDU"].ToString().Trim();
                 cmbLinhVuc1.SelectedValue = row["LINHVUC"];
+                txtBuoiHoc.Text = row["BUOIHOC"] == null ? null : row["BUOIHOC"].ToString().Trim();
+                cmbKhoaHoc1.SelectedValue = row["KHOAHOC"] == null ? null : row["KHOAHOC"].ToString().Trim();
             }
             isUpdate = true;
             panelLoc.Visible = dgvDSTU.Enabled = btnTraCuu.Enabled = btnThem.Enabled = btnTaiLai.Enabled = btnXoa.Enabled = btnThoat.Enabled = false;
             txtGhiChu.ReadOnly = false;
             txtNoiDung.ReadOnly = false;
-            panelFormatText.Visible = lbLinhVuc.Visible = cmbLinhVuc1.Visible = lbTuDayDu.Visible = txtTuDayDu.Visible = lbTuVietTat.Visible = txtTuVietTat.Visible = true;
+            lbKhoaHoc.Visible = cmbKhoaHoc1.Visible = lbBuoiHoc.Visible = txtBuoiHoc.Visible = panelFormatText.Visible = lbLinhVuc.Visible = cmbLinhVuc1.Visible = lbTuDayDu.Visible = txtTuDayDu.Visible = lbTuVietTat.Visible = txtTuVietTat.Visible = true;
             txtTuVietTat.Focus();
             txtNoiDung.BackColor = txtGhiChu.BackColor = Color.Thistle;
         }
@@ -600,7 +667,7 @@ namespace TuDienChuyenNganhCyberSecurity
                     }
                     using (var connection = new SQLiteConnection(Program.connectionString))
                     {
-                        string query = "INSERT INTO TUDIEN (TUVIETTAT, TUDAYDU, NOIDUNG, GHICHU, LINHVUC) VALUES (@TUVIETTAT, @TUDAYDU, @NOIDUNG, @GHICHU, @LINHVUC)";
+                        string query = "INSERT INTO TUDIEN (TUVIETTAT, TUDAYDU, NOIDUNG, GHICHU, LINHVUC, KHOAHOC, BUOIHOC) VALUES (@TUVIETTAT, @TUDAYDU, @NOIDUNG, @GHICHU, @LINHVUC, @KHOAHOC, @BUOIHOC)";
                         connection.Open();
                         using (SQLiteCommand cmd = new SQLiteCommand(query, connection))
                         {
@@ -623,6 +690,8 @@ namespace TuDienChuyenNganhCyberSecurity
                                 cmd.Parameters.AddWithValue("@GHICHU", txtGhiChu.Text.Trim());
                             }
                             cmd.Parameters.AddWithValue("@LINHVUC", cmbLinhVuc1.Text.Trim());
+                            cmd.Parameters.AddWithValue("@KHOAHOC", string.IsNullOrWhiteSpace(cmbKhoaHoc.Text) ? DBNull.Value : cmbKhoaHoc.Text.Trim());
+                            cmd.Parameters.AddWithValue("@BUOIHOC", string.IsNullOrWhiteSpace(txtBuoiHoc.Text) ? DBNull.Value : Convert.ToInt32(txtBuoiHoc.Text.Trim()));
                             cmd.ExecuteNonQuery();
                         }
                     }
@@ -633,7 +702,7 @@ namespace TuDienChuyenNganhCyberSecurity
                     txtNoiDung.ReadOnly = true;
                     panelLoc.Visible = dgvDSTU.Enabled = btnTraCuu.Enabled = btnCapNhat.Enabled = btnTaiLai.Enabled = btnXoa.Enabled = btnThoat.Enabled = true;
                     txtNoiDung.BackColor = txtGhiChu.BackColor = SystemColors.GradientInactiveCaption;
-                    panelFormatText.Visible = lbLinhVuc.Visible = cmbLinhVuc1.Visible = lbTuDayDu.Visible = txtTuDayDu.Visible = lbTuVietTat.Visible = txtTuVietTat.Visible = false;
+                    lbKhoaHoc.Visible = cmbKhoaHoc1.Visible = lbBuoiHoc.Visible = txtBuoiHoc.Visible = panelFormatText.Visible = lbLinhVuc.Visible = cmbLinhVuc1.Visible = lbTuDayDu.Visible = txtTuDayDu.Visible = lbTuVietTat.Visible = txtTuVietTat.Visible = false;
                 }
                 catch (SQLiteException ex)
                 {
@@ -664,7 +733,7 @@ namespace TuDienChuyenNganhCyberSecurity
                     }
                     using (var connection = new SQLiteConnection(Program.connectionString))
                     {
-                        string query = "UPDATE TUDIEN SET TUVIETTAT = @TUVIETTAT, TUDAYDU = @TUDAYDU, NOIDUNG = @NOIDUNG, GHICHU = @GHICHU, LINHVUC = @LINHVUC WHERE ID = @ID";
+                        string query = "UPDATE TUDIEN SET TUVIETTAT = @TUVIETTAT, TUDAYDU = @TUDAYDU, NOIDUNG = @NOIDUNG, GHICHU = @GHICHU, LINHVUC = @LINHVUC, KHOAHOC = @KHOAHOC, BUOIHOC = @BUOIHOC WHERE ID = @ID";
                         connection.Open();
                         if (isSearching)
                         {
@@ -691,6 +760,8 @@ namespace TuDienChuyenNganhCyberSecurity
                                     cmd.Parameters.AddWithValue("@GHICHU", txtGhiChu.Text.Trim());
                                 }
                                 cmd.Parameters.AddWithValue("@LINHVUC", cmbLinhVuc1.Text.Trim());
+                                cmd.Parameters.AddWithValue("@KHOAHOC", string.IsNullOrWhiteSpace(cmbKhoaHoc.Text) ? DBNull.Value : cmbKhoaHoc.Text.Trim());
+                                cmd.Parameters.AddWithValue("@BUOIHOC", string.IsNullOrWhiteSpace(txtBuoiHoc.Text) ? DBNull.Value : Convert.ToInt32(txtBuoiHoc.Text.Trim()));
                                 cmd.ExecuteNonQuery();
                             }
                         }
@@ -719,6 +790,8 @@ namespace TuDienChuyenNganhCyberSecurity
                                     cmd.Parameters.AddWithValue("@GHICHU", txtGhiChu.Text.Trim());
                                 }
                                 cmd.Parameters.AddWithValue("@LINHVUC", cmbLinhVuc1.Text.Trim());
+                                cmd.Parameters.AddWithValue("@KHOAHOC", string.IsNullOrWhiteSpace(cmbKhoaHoc.Text) ? DBNull.Value : cmbKhoaHoc.Text.Trim());
+                                cmd.Parameters.AddWithValue("@BUOIHOC", string.IsNullOrWhiteSpace(txtBuoiHoc.Text) ? DBNull.Value : Convert.ToInt32(txtBuoiHoc.Text.Trim()));
                                 cmd.ExecuteNonQuery();
                             }
                         }
@@ -730,7 +803,7 @@ namespace TuDienChuyenNganhCyberSecurity
                     txtNoiDung.ReadOnly = true;
                     panelLoc.Visible = dgvDSTU.Enabled = btnTraCuu.Enabled = btnThem.Enabled = btnTaiLai.Enabled = btnXoa.Enabled = btnThoat.Enabled = true;
                     txtNoiDung.BackColor = txtGhiChu.BackColor = SystemColors.GradientInactiveCaption;
-                    panelFormatText.Visible = lbLinhVuc.Visible = cmbLinhVuc1.Visible = lbTuDayDu.Visible = txtTuDayDu.Visible = lbTuVietTat.Visible = txtTuVietTat.Visible = false;
+                    lbKhoaHoc.Visible = cmbKhoaHoc1.Visible = lbBuoiHoc.Visible = txtBuoiHoc.Visible = panelFormatText.Visible = lbLinhVuc.Visible = cmbLinhVuc1.Visible = lbTuDayDu.Visible = txtTuDayDu.Visible = lbTuVietTat.Visible = txtTuVietTat.Visible = false;
                     if (isSearching)
                     {
                         panelLoc.Visible = false;
@@ -818,7 +891,7 @@ namespace TuDienChuyenNganhCyberSecurity
 
                 btnItalic.PerformClick();    // Gọi lại sự kiện Click của nút bấm
             }
-            if ((e.Alt && e.KeyCode == Keys.Right) || (e.Alt && e.KeyCode == Keys.Down))
+            if ((e.Alt && e.KeyCode == Keys.Right) || (e.Alt && e.KeyCode == Keys.Down) || (e.Control && e.KeyCode == Keys.Enter))
             {
                 e.SuppressKeyPress = true; // Chặn tiếng "bíp" của hệ thống Windows
                 txtGhiChu.Focus();
@@ -827,7 +900,7 @@ namespace TuDienChuyenNganhCyberSecurity
             if ((e.Alt && e.KeyCode == Keys.Left) || (e.Alt && e.KeyCode == Keys.Up))
             {
                 e.SuppressKeyPress = true; // Chặn tiếng "bíp" của hệ thống Windows
-                cmbLinhVuc1.Focus();
+                txtBuoiHoc.Focus();
                 e.Handled = true;
             }
         }
@@ -895,10 +968,19 @@ namespace TuDienChuyenNganhCyberSecurity
 
         private void cmbLinhVuc_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (isLoading) return;
+            isLoading = true;
             if (cmbLinhVuc.SelectedIndex != -1 && Program.ComboBoxCoGiaTri(cmbLinhVuc, "LINHVUC", cmbLinhVuc.Text.Trim()))
             {
+                linhvuc = cmbLinhVuc.SelectedValue == null ? "Tất cả" : cmbLinhVuc.SelectedValue.ToString(); 
+                cmbKhoaHoc.SelectedValue = "Tất cả";
+                cmbKhoaHoc.BackColor = Color.White;
+                dgvDSTU.Columns["BuoiHoc"].Visible = dgvDSTU.Columns["KhoaHoc"].Visible = false;
+                dgvDSTU.Columns["Linhvuc"].Visible = true;
+                lbFrom.Visible = lbTo.Visible = cmbFrom.Visible = cmbTo.Visible = btnLoc.Visible = false;
                 DisplayPage(1);
             }
+            isLoading = false;
         }
 
         private void cmbNgaySua_SelectionChangeCommitted(object sender, EventArgs e)
@@ -1049,14 +1131,31 @@ namespace TuDienChuyenNganhCyberSecurity
 
             //Khởi tạo DataView từ DataTable gốc để Lọc và Sắp xếp
             DataView dataView = new DataView(dtOriginal);
+            // Trích xuất giá trị an toàn (tránh NullReferenceException)
+            string linhVucVal = cmbLinhVuc.SelectedValue?.ToString();
+            string khoaHocVal = cmbKhoaHoc.SelectedValue?.ToString();
+            string khoaHocText = cmbKhoaHoc.Text; // .Text luôn trả về chuỗi (rỗng hoặc có chữ), không bị null
             //Xử lý chức năng LỌC (Filter) theo cột Lĩnh Vực
-            if (cmbLinhVuc.SelectedIndex != -1 && cmbLinhVuc.SelectedValue.ToString() != "Tất cả")
+            if (linhVucVal !=null && linhVucVal != "Tất cả")
             {
-                dataView.RowFilter = $"LinhVuc = '{cmbLinhVuc.SelectedValue}'";
+                dataView.RowFilter = $"LinhVuc = '{linhVucVal.Replace("'", "''")}'";
             }
+            //Lọc các từ không có Khóa học
+            else if (khoaHocText == "--blank--")
+            {
+                dataView.RowFilter = $"KhoaHoc = '{khoaHocText.Replace("'", "''")}'";
+            }
+            //Lọc theo khóa học cụ thể và theo buổi học
+            else if (cmbKhoaHoc.SelectedIndex != -1 && khoaHocVal != "--blank--" && khoaHocVal != "Tất cả" &&
+                     int.TryParse(cmbFrom.SelectedValue?.ToString(), out int fromVal) &&
+                     int.TryParse(cmbTo.SelectedValue?.ToString(), out int toVal))
+            {
+                dataView.RowFilter = $"BuoiHoc >= {fromVal} AND BuoiHoc <= {toVal}";
+            }
+            // Không lọc nếu cả lĩnh vực và khóa học đều chọn "Tất cả"
             else
             {
-                dataView.RowFilter = string.Empty; // Không lọc nếu chọn "Tất cả"
+                dataView.RowFilter = string.Empty; 
             }
 
             dataView.Sort = kieuSapXep;
@@ -1201,9 +1300,9 @@ namespace TuDienChuyenNganhCyberSecurity
                 }
             }
 
-            if (e.Control && e.KeyCode == Keys.Oemplus) //them tu
+            if (e.Control && e.KeyCode == Keys.N) //them tu
             {
-                if(!isUpdate && !isSearching && !isAdd)
+                if (!isUpdate && !isSearching && !isAdd)
                 {
                     e.SuppressKeyPress = true;
                     btnThem_Click(sender, e);
@@ -1211,19 +1310,19 @@ namespace TuDienChuyenNganhCyberSecurity
                 }
             }
 
-            if (e.Control && e.KeyCode == Keys.U) //chinh sua tu
+            if (e.Control && e.KeyCode == Keys.M) //chinh sua tu
             {
                 if (!isAdd && !isUpdate)
                 {
                     e.SuppressKeyPress = true;
                     btnCapNhat_Click(sender, e);
                     e.Handled = true;
-                } 
+                }
             }
 
             if (e.Control && e.KeyCode == Keys.F) //tra cuu tu
             {
-                if(!isAdd && !isUpdate && !isSearching)
+                if (!isAdd && !isUpdate && !isSearching)
                 {
                     e.SuppressKeyPress = true;
                     btnTraCuu_Click(sender, e);
@@ -1233,21 +1332,43 @@ namespace TuDienChuyenNganhCyberSecurity
 
             if (e.KeyCode == Keys.Escape) //Thoat khi dang tra cuu/them/sua
             {
-                if(isAdd || isUpdate || isSearching)
+                if (isAdd || isUpdate || isSearching)
                 {
                     e.SuppressKeyPress = true;
                     btnPhucHoi_Click(sender, e);
                     e.Handled = true;
                 }
             }
+
+            if (e.KeyCode == Keys.Delete)
+            {
+                e.SuppressKeyPress = true;
+                btnXoa_Click(sender, e);
+                e.Handled = true;
+            }
+
+            if (e.Alt && e.KeyCode == Keys.C)
+            {
+                e.SuppressKeyPress = true;
+                ChangeColor(btnShowColor.BackColor);
+                e.Handled = true;
+            }
+
+            if (e.Alt && e.KeyCode == Keys.S)
+            {
+                e.SuppressKeyPress = true;
+                btnShowSymbol_Click(sender, e);
+                e.Handled = true;
+            }
         }
 
         private void cmbLinhVuc1_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Tab)
+            if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Tab || (e.Alt && e.KeyCode == Keys.Right))
             {
                 e.SuppressKeyPress = true; // Tắt tiếng bíp
-                txtNoiDung.Focus(); // Chuyển focus sang RichTextBox txtNoiDung
+                cmbKhoaHoc1.Focus(); // Chuyển focus sang cmbKhoaHoc
+                e.Handled = true;
             }
             else if (e.Alt && e.KeyCode == Keys.Left)
             {
@@ -1255,18 +1376,12 @@ namespace TuDienChuyenNganhCyberSecurity
                 txtTuDayDu.Focus(); // Chuyển focus sang TextBox txtTuDayDu
                 e.Handled = true; // Ngăn chặn sự kiện mặc định của phím Alt + Left Arrow
             }
-            else if ((e.Alt && e.KeyCode == Keys.Right) || (e.Alt && e.KeyCode == Keys.Down))
-            {
-                e.SuppressKeyPress = true; // Tắt tiếng bíp
-                txtNoiDung.Focus(); // Chuyển focus sang RichTextBox txtGhiChu
-                e.Handled = true; // Ngăn chặn sự kiện mặc định của phím Alt + Right Arrow
-            }
         }
 
         private void cmbLinhVuc1_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
         {
-            // Báo cho hệ thống biết phím Tab/Enter sẽ được xử lý như một phím bấm thông thường
-            if (e.KeyCode == Keys.Tab || e.KeyCode == Keys.Enter || e.KeyCode == Keys.Left || e.KeyCode == Keys.Right)
+            // Báo cho hệ thống biết phím Enter sẽ được xử lý như một phím bấm thông thường
+            if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Left || e.KeyCode == Keys.Right)
             {
                 e.IsInputKey = true;
             }
@@ -1301,6 +1416,235 @@ namespace TuDienChuyenNganhCyberSecurity
                 e.SuppressKeyPress = true; // Tắt tiếng bíp
                 cmbLinhVuc1.Focus();
                 e.Handled = true; // Ngăn chặn sự kiện mặc định của phím Alt + Right Arrow
+            }
+        }
+
+        private void txtBuoiHoc_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Alt && e.KeyCode == Keys.Left)
+            {
+                e.SuppressKeyPress = true; // Tắt tiếng bíp
+                cmbKhoaHoc1.Focus();
+                e.Handled = true; // Ngăn chặn sự kiện mặc định của phím Alt + Left Arrow
+            }
+            else if (e.KeyCode == Keys.Tab || (e.Alt && e.KeyCode == Keys.Right) || (e.Alt && e.KeyCode == Keys.Down) || e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true; // Tắt tiếng bíp
+                txtNoiDung.Focus();
+                e.Handled = true; // Ngăn chặn sự kiện mặc định của phím Alt + Left Arrow
+            }
+        }
+
+
+        private void cmbKhoaHoc_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Alt && e.KeyCode == Keys.Left)
+            {
+                e.SuppressKeyPress = true; // Tắt tiếng bíp
+                cmbLinhVuc1.Focus();
+                e.Handled = true; // Ngăn chặn sự kiện mặc định của phím Alt + Left Arrow
+            }
+            else if (e.KeyCode == Keys.Tab || (e.Alt && e.KeyCode == Keys.Right) || (e.KeyCode == Keys.Enter))
+            {
+                e.SuppressKeyPress = true; // Tắt tiếng bíp
+                txtBuoiHoc.Focus();
+                e.Handled = true; // Ngăn chặn sự kiện mặc định của phím Alt + Left Arrow
+            }
+        }
+
+        private void cmbKhoaHoc_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Left || e.KeyCode == Keys.Right)
+            {
+                e.IsInputKey = true;
+            }
+        }
+
+        private void cmbKhoaHoc_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (isLoading) return;
+            isLoading = true;
+            if (cmbKhoaHoc.SelectedIndex > 0 && cmbKhoaHoc.SelectedValue.ToString() != "--blank--" && Program.ComboBoxCoGiaTri(cmbKhoaHoc, "KhoaHoc", cmbKhoaHoc.Text.Trim()))
+            {
+                cmbLinhVuc.SelectedIndex = 0; 
+                cmbKhoaHoc.BackColor = Color.PapayaWhip;
+                string query = "SELECT BUOIHOC FROM TUDIEN WHERE KHOAHOC = @KHOAHOC GROUP BY BUOIHOC";
+                using (var connection = new SQLiteConnection(Program.connectionString))
+                {
+                    using (var cmd = new SQLiteCommand(query, connection))
+                    {
+                        cmd.Parameters.AddWithValue("@KHOAHOC", cmbKhoaHoc.Text.Trim());
+                        DataTable dt = new DataTable();
+                        SQLiteDataAdapter da = new SQLiteDataAdapter(cmd);
+                        da.Fill(dt);
+                        bds_dsbuoihocfrom.DataSource = dt;
+                        cmbFrom.DataSource = bds_dsbuoihocfrom;
+                        cmbFrom.DisplayMember = "BUOIHOC";
+                        cmbFrom.ValueMember = "BUOIHOC";
+                        cmbFrom.SelectedIndex = 0;
+                        bds_dsbuoihocto.DataSource = dt;
+                        cmbTo.DataSource = bds_dsbuoihocto;
+                        cmbTo.DisplayMember = "BUOIHOC";
+                        cmbTo.ValueMember = "BUOIHOC";
+                        cmbTo.SelectedIndex = 0;
+                    }
+                }
+                if (cmbTo.Items.Count > 0)
+                {
+                    buoiHocMax = cmbTo.Items.Cast<System.Data.DataRowView>()
+                                            .Select(x => Convert.ToInt32(x["BUOIHOC"]))
+                                            .Max();
+                }
+                else
+                {
+                    buoiHocMax = 0;
+                }
+                lbFrom.Visible = lbTo.Visible = cmbFrom.Visible = cmbTo.Visible = btnLoc.Visible = true;
+                cmbFrom.Focus();
+            }
+            else
+            {
+                if(cmbKhoaHoc.Text == "--blank--")
+                {
+                    cmbLinhVuc.SelectedIndex = 0;
+                }
+                cmbKhoaHoc.BackColor = Color.White;
+                lbFrom.Visible = lbTo.Visible = cmbFrom.Visible = cmbTo.Visible = btnLoc.Visible = false;
+                dgvDSTU.Columns["BuoiHoc"].Visible = dgvDSTU.Columns["KhoaHoc"].Visible = false;
+                dgvDSTU.Columns["Linhvuc"].Visible = true;
+                DisplayPage(1);
+            }
+            isLoading = false;
+        }
+
+        private void txtBuoiHoc_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+            {
+                e.Handled = true;
+            }
+            else if (int.TryParse(txtBuoiHoc.Text + e.KeyChar, out int result) && result > 9999)
+            {
+                e.Handled = true;
+                txtBuoiHoc.Text = "9999";
+                txtBuoiHoc.SelectionStart = txtBuoiHoc.Text.Length; // Đặt con trỏ ở cuối
+            }
+        }
+
+        private void txtBuoiHoc_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            if (e.KeyCode == Keys.Tab)
+            {
+                e.IsInputKey = true;
+            }
+        }
+
+        private void cmbKhoaHoc_KeyDown_1(object sender, KeyEventArgs e)
+        {
+            if (e.Alt && e.KeyCode == Keys.Right)
+            {
+                e.SuppressKeyPress = true; // Tắt tiếng bíp
+                cmbFrom.Focus();
+                e.Handled = true; // Ngăn chặn sự kiện mặc định của phím Alt + Left Arrow
+            }
+        }
+
+        private void cmbFrom_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Alt && e.KeyCode == Keys.Left)
+            {
+                e.SuppressKeyPress = true; // Tắt tiếng bíp
+                cmbKhoaHoc.Focus();
+                e.Handled = true; // Ngăn chặn sự kiện mặc định của phím Alt + Left Arrow
+            }
+            if (e.Alt && e.KeyCode == Keys.Right)
+            {
+                e.SuppressKeyPress = true; // Tắt tiếng bíp
+                cmbTo.Focus();
+                e.Handled = true; // Ngăn chặn sự kiện mặc định của phím Alt + Left Arrow
+            }
+        }
+
+        private void cmbTo_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Alt && e.KeyCode == Keys.Left)
+            {
+                e.SuppressKeyPress = true; // Tắt tiếng bíp
+                cmbFrom.Focus();
+                e.Handled = true; // Ngăn chặn sự kiện mặc định của phím Alt + Left Arrow
+            }
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true; // Tắt tiếng bíp
+                btnLoc_Click(sender, e);
+                e.Handled = true; // Ngăn chặn sự kiện mặc định của phím Alt + Left Arrow
+            }
+
+        }
+
+
+
+        private void cmbKhoaHoc_PreviewKeyDown_1(object sender, PreviewKeyDownEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Left || e.KeyCode == Keys.Right)
+            {
+                e.IsInputKey = true;
+            }
+        }
+
+        private void cmbFrom_Leave(object sender, EventArgs e)
+        {
+            if (!Program.ComboBoxCoGiaTri(cmbFrom, "BuoiHoc", cmbFrom.Text.Trim()))
+            {
+                cmbFrom.SelectedIndex = 0;
+                cmbFrom.Focus();
+                MessageBox.Show("Giá trị không hợp lệ. Vui lòng chọn từ danh sách", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
+        private void btnLoc_Click(object sender, EventArgs e)
+        {
+            int fromValue = int.Parse(cmbFrom.SelectedValue.ToString());
+            int toValue = int.Parse(cmbTo.SelectedValue.ToString());
+            if (fromValue > toValue)
+            {
+                MessageBox.Show("Giá trị 'Từ buổi học' phải nhỏ hơn hoặc bằng 'Đến buổi học'. Vui lòng chọn lại.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                cmbTo.SelectedValue = cmbFrom.SelectedValue;
+                cmbTo.Focus();
+                return;
+            }
+            dgvDSTU.Columns["BuoiHoc"].Visible = dgvDSTU.Columns["KhoaHoc"].Visible = true;
+            dgvDSTU.Columns["Linhvuc"].Visible = false;
+            //MessageBox.Show("Chức năng lọc theo buổi học đang được phát triển. Vui lòng sử dụng chức năng lọc theo lĩnh vực hoặc khóa học.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            DisplayPage(1);
+        }
+
+
+        private void cmbTo_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+            {
+                e.Handled = true;
+            }
+            else if (int.TryParse(cmbTo.Text + e.KeyChar, out int result) && result > buoiHocMax)
+            {
+                e.Handled = true;
+                cmbTo.SelectedValue = buoiHocMax.ToString();
+                cmbTo.SelectionStart = cmbTo.Text.Length; // Đặt con trỏ ở cuối
+            }
+        }
+
+        private void cmbFrom_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+            {
+                e.Handled = true;
+            }
+            else if (int.TryParse(cmbTo.Text + e.KeyChar, out int result) && result > buoiHocMax)
+            {
+                e.Handled = true;
+                cmbFrom.SelectedValue = buoiHocMax.ToString();
+                cmbFrom.SelectionStart = cmbFrom.Text.Length; // Đặt con trỏ ở cuối
             }
         }
     }
