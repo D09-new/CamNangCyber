@@ -29,7 +29,7 @@ namespace TuDienChuyenNganhCyberSecurity
         //Loc theo khoa hoc va buoi hoc
         string lastFrom = "";
         string lastTo = "";
-        string lastCourse = "Tất cả";
+        string lastCourse = "";
         RichTextBox targetRtb;
         int selectionStart = -1;
         int selectionLength = 0;
@@ -127,6 +127,7 @@ namespace TuDienChuyenNganhCyberSecurity
                         cmbKhoaHoc.DisplayMember = "KHOAHOC";
                         cmbKhoaHoc.ValueMember = "KHOAHOC";
                         cmbKhoaHoc.SelectedIndex = 0;
+                        lastCourse = cmbKhoaHoc.Text;
                     }
                 }
                 cmbNgaySua.SelectedIndex = cmbNgayTao.SelectedIndex = 0;
@@ -459,12 +460,6 @@ namespace TuDienChuyenNganhCyberSecurity
                         cmbTuVietTat.DisplayMember = "TuVietTat";
                         cmbTuVietTat.ValueMember = "ID";
                         cmbTuVietTat.SelectedIndex = -1;
-                        if (position != -1)
-                        {
-                            DataRowView row = bds_dstu[position] as DataRowView;
-                            GanNoiDungRichTextBox(txtNoiDung, row["NoiDung"]);
-                            GanNoiDungRichTextBox(txtGhiChu, row["GhiChu"]);
-                        }
                     }
                     using (SQLiteCommand cmd2 = new SQLiteCommand(query2, connection))
                     {
@@ -477,15 +472,6 @@ namespace TuDienChuyenNganhCyberSecurity
                         cmbLinhVuc1.DataSource = bds_dslinhvuc1;
                         cmbLinhVuc1.DisplayMember = "LINHVUC";
                         cmbLinhVuc1.ValueMember = "LINHVUC";
-                        if (position != -1)
-                        {
-                            DataRowView row = bds_dstu[position] as DataRowView;
-                            cmbLinhVuc1.SelectedValue = row["LinhVuc"];
-                        }
-                        else
-                        {
-                            cmbLinhVuc1.SelectedValue = -1;
-                        }
                         DataRow dr = dt1.NewRow();
                         dr["LINHVUC"] = "Tất cả";
                         dt1.Rows.InsertAt(dr, 0);
@@ -517,7 +503,14 @@ namespace TuDienChuyenNganhCyberSecurity
                         cmbKhoaHoc.DataSource = bds_dskhoahoc;
                         cmbKhoaHoc.DisplayMember = "KHOAHOC";
                         cmbKhoaHoc.ValueMember = "KHOAHOC";
-                        cmbKhoaHoc.SelectedValue = lastCourse;
+                        if(lastCourse != "Tất cả")
+                        {
+                            cmbKhoaHoc.SelectedValue = lastCourse;
+                        }
+                        else
+                        {
+                            cmbKhoaHoc.SelectedIndex = 0;
+                        }
                     }
                     if (cmbKhoaHoc.SelectedIndex > 0 && cmbKhoaHoc.SelectedValue != null && cmbKhoaHoc.SelectedValue.ToString() != "--blank--")
                     {
@@ -549,9 +542,19 @@ namespace TuDienChuyenNganhCyberSecurity
                             }
                         }
                     }
-
+                    DisplayPage(currentPage);
+                    if (position != -1)
+                    {
+                        DataRowView row = bds_dstu[position] as DataRowView;
+                        cmbLinhVuc1.SelectedValue = row["LinhVuc"];
+                        GanNoiDungRichTextBox(txtNoiDung, row["NoiDung"]);
+                        GanNoiDungRichTextBox(txtGhiChu, row["GhiChu"]);
+                    }
+                    else
+                    {
+                        cmbLinhVuc1.SelectedValue = -1;
+                    }
                 }
-                DisplayPage(currentPage);
                 isLoading = false;
             }
             catch (SQLiteException ex)
@@ -875,6 +878,7 @@ namespace TuDienChuyenNganhCyberSecurity
                 {
                     using (var connection = new SQLiteConnection(Program.connectionString))
                     {
+                        connection.Open();
                         string query = "DELETE FROM TUDIEN WHERE ID = @ID";
                         using (SQLiteCommand cmd = new SQLiteCommand(query, connection))
                         {
