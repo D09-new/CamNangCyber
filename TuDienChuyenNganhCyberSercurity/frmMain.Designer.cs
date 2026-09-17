@@ -655,7 +655,7 @@
             // BUOIHOC
             // 
             BUOIHOC.DataPropertyName = "BUOIHOC";
-            dataGridViewCellStyle7.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle7.Alignment = DataGridViewContentAlignment.MiddleCenter;
             dataGridViewCellStyle7.Font = new Font("Times New Roman", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             dataGridViewCellStyle7.ForeColor = Color.Black;
             BUOIHOC.DefaultCellStyle = dataGridViewCellStyle7;

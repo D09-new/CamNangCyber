@@ -537,6 +537,16 @@ namespace TuDienChuyenNganhCyberSecurity
                             cmbTo.DisplayMember = "BUOIHOC";
                             cmbTo.ValueMember = "BUOIHOC";
                             if (lastTo != "") cmbTo.SelectedValue = lastTo;
+                            if (cmbTo.Items.Count > 0)
+                            {
+                                buoiHocMax = cmbTo.Items.Cast<System.Data.DataRowView>()
+                                                        .Select(x => Convert.ToInt32(x["BUOIHOC"]))
+                                                        .Max();
+                            }
+                            else
+                            {
+                                buoiHocMax = 0;
+                            }
                         }
                     }
 
@@ -1177,7 +1187,7 @@ namespace TuDienChuyenNganhCyberSecurity
                      int.TryParse(cmbFrom.SelectedValue?.ToString(), out int fromVal) &&
                      int.TryParse(cmbTo.SelectedValue?.ToString(), out int toVal))
             {
-                dataView.RowFilter = $"BuoiHoc >= {fromVal} AND BuoiHoc <= {toVal}";
+                dataView.RowFilter = $"KhoaHoc = '{khoaHocVal.Replace("'", "''")}' AND BuoiHoc >= {fromVal} AND BuoiHoc <= {toVal}";
             }
             // Không lọc nếu cả lĩnh vực và khóa học đều chọn "Tất cả"
             else
