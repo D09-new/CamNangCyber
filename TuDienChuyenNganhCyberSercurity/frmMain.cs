@@ -6,7 +6,7 @@ namespace TuDienChuyenNganhCyberSecurity
     {
         DataTable dtOriginal = new DataTable(); // Chứa toàn bộ dữ liệu gốc
         int currentPage = 1;  // Trang hiện tại
-        readonly int pageSize = 30;    // Số dòng trên một trang
+        readonly int pageSize = 25;    // Số dòng trên một trang
         int totalPages = 1;   // Tổng số trang
         string kieuSapXep = "";
         public static BindingSource bds_dscmb = new BindingSource();
@@ -26,6 +26,10 @@ namespace TuDienChuyenNganhCyberSecurity
         string linhvuc = "Tất cả";
         string tuviettat = "";
         string tudaydu = "";
+        //Loc theo khoa hoc va buoi hoc
+        string lastFrom = "";
+        string lastTo = "";
+        string lastCourse = "Tất cả";
         RichTextBox targetRtb;
         int selectionStart = -1;
         int selectionLength = 0;
@@ -101,7 +105,7 @@ namespace TuDienChuyenNganhCyberSecurity
                         cmbLinhVuc.DataSource = bds_dslinhvuc;
                         cmbLinhVuc.DisplayMember = "LINHVUC";
                         cmbLinhVuc.ValueMember = "LINHVUC";
-                        cmbLinhVuc.SelectedIndex = -1;
+                        cmbLinhVuc.SelectedIndex = 0;
                     }
                     using (var cmd3 = new SQLiteCommand(query3, connection))
                     {
@@ -128,13 +132,13 @@ namespace TuDienChuyenNganhCyberSecurity
                 cmbNgaySua.SelectedIndex = cmbNgayTao.SelectedIndex = 0;
                 if (bds_dstu.Count > 0)
                 {
+                    bds_dstu.Position = 0;
                     DataRowView row = bds_dstu[0] as DataRowView;
                     GanNoiDungRichTextBox(txtNoiDung, row["NoiDung"]);
                     GanNoiDungRichTextBox(txtGhiChu, row["GhiChu"]);
                     cmbLinhVuc1.SelectedValue = row["LinhVuc"];
                 }
                 isLoading = false;
-                cmbLinhVuc.SelectedIndex = 0;
 
             }
             catch (SQLiteException ex)
@@ -446,7 +450,6 @@ namespace TuDienChuyenNganhCyberSecurity
                         SQLiteDataAdapter da = new SQLiteDataAdapter(cmd);
                         dtOriginal.Clear();
                         da.Fill(dtOriginal);
-                        DisplayPage(1);
                         bds_dscmb.DataSource = dtOriginal;
                         cmbTuDayDu.DataSource = bds_dscmb;
                         cmbTuDayDu.DisplayMember = "TuDayDu";
@@ -490,6 +493,10 @@ namespace TuDienChuyenNganhCyberSecurity
                         cmbLinhVuc.DataSource = bds_dslinhvuc;
                         cmbLinhVuc.DisplayMember = "LINHVUC";
                         cmbLinhVuc.ValueMember = "LINHVUC";
+                        if (linhvuc != null && linhvuc != "")
+                        {
+                            cmbLinhVuc.SelectedValue = linhvuc;
+                        }
                     }
                     using (var cmd3 = new SQLiteCommand(query3, connection))
                     {
@@ -510,12 +517,32 @@ namespace TuDienChuyenNganhCyberSecurity
                         cmbKhoaHoc.DataSource = bds_dskhoahoc;
                         cmbKhoaHoc.DisplayMember = "KHOAHOC";
                         cmbKhoaHoc.ValueMember = "KHOAHOC";
-                        //cmbKhoaHoc.SelectedIndex = 0;
+                        cmbKhoaHoc.SelectedValue = lastCourse;
                     }
-                }
-                isLoading = false;
-                cmbLinhVuc.SelectedValue = linhvuc;
+                    if (cmbKhoaHoc.SelectedIndex > 0 && cmbKhoaHoc.SelectedValue != null && cmbKhoaHoc.SelectedValue.ToString() != "--blank--")
+                    {
+                        using (var cmd4 = new SQLiteCommand(query4, connection))
+                        {
+                            cmd4.Parameters.AddWithValue("@KHOAHOC", cmbKhoaHoc.SelectedValue.ToString());
+                            DataTable dt5 = new DataTable();
+                            SQLiteDataAdapter da5 = new SQLiteDataAdapter(cmd4);
+                            da5.Fill(dt5);
+                            bds_dsbuoihocto.DataSource = dt5;
+                            cmbFrom.DataSource = bds_dsbuoihocfrom;
+                            cmbFrom.DisplayMember = "BUOIHOC";
+                            cmbFrom.ValueMember = "BUOIHOC";
+                            if (lastFrom != "") cmbFrom.SelectedValue = lastFrom;
+                            bds_dsbuoihocfrom.DataSource = dt5;
+                            cmbTo.DataSource = bds_dsbuoihocto;
+                            cmbTo.DisplayMember = "BUOIHOC";
+                            cmbTo.ValueMember = "BUOIHOC";
+                            if (lastTo != "") cmbTo.SelectedValue = lastTo;
+                        }
+                    }
 
+                }
+                DisplayPage(currentPage);
+                isLoading = false;
             }
             catch (SQLiteException ex)
             {
@@ -623,8 +650,8 @@ namespace TuDienChuyenNganhCyberSecurity
                 tuviettat = txtTuVietTat.Text = row["TUVIETTAT"].ToString().Trim();
                 tudaydu = txtTuDayDu.Text = row["TUDAYDU"].ToString().Trim();
                 cmbLinhVuc1.SelectedValue = row["LINHVUC"];
-                txtBuoiHoc.Text = row["BUOIHOC"] == null ? null : row["BUOIHOC"].ToString().Trim();
-                cmbKhoaHoc1.SelectedValue = row["KHOAHOC"] == null ? null : row["KHOAHOC"].ToString().Trim();
+                txtBuoiHoc.Text = (row["BUOIHOC"] == null || row["BUOIHOC"] == DBNull.Value) ? "" : row["BUOIHOC"].ToString().Trim();
+                cmbKhoaHoc1.SelectedValue = (row["KHOAHOC"] == null || row["KHOAHOC"] == DBNull.Value) ? null : row["KHOAHOC"].ToString().Trim();
             }
             else
             {
@@ -632,8 +659,8 @@ namespace TuDienChuyenNganhCyberSecurity
                 tuviettat = txtTuVietTat.Text = row["TUVIETTAT"].ToString().Trim();
                 tudaydu = txtTuDayDu.Text = row["TUDAYDU"].ToString().Trim();
                 cmbLinhVuc1.SelectedValue = row["LINHVUC"];
-                txtBuoiHoc.Text = row["BUOIHOC"] == null ? null : row["BUOIHOC"].ToString().Trim();
-                cmbKhoaHoc1.SelectedValue = row["KHOAHOC"] == null ? null : row["KHOAHOC"].ToString().Trim();
+                txtBuoiHoc.Text = (row["BUOIHOC"] == null || row["BUOIHOC"] == DBNull.Value) ? "" : row["BUOIHOC"].ToString().Trim();
+                cmbKhoaHoc1.SelectedValue = (row["KHOAHOC"] == null || row["KHOAHOC"] == DBNull.Value) ? null : row["KHOAHOC"].ToString().Trim();
             }
             isUpdate = true;
             panelLoc.Visible = dgvDSTU.Enabled = btnTraCuu.Enabled = btnThem.Enabled = btnTaiLai.Enabled = btnXoa.Enabled = btnThoat.Enabled = false;
@@ -690,7 +717,7 @@ namespace TuDienChuyenNganhCyberSecurity
                                 cmd.Parameters.AddWithValue("@GHICHU", txtGhiChu.Text.Trim());
                             }
                             cmd.Parameters.AddWithValue("@LINHVUC", cmbLinhVuc1.Text.Trim());
-                            cmd.Parameters.AddWithValue("@KHOAHOC", string.IsNullOrWhiteSpace(cmbKhoaHoc.Text) ? DBNull.Value : cmbKhoaHoc.Text.Trim());
+                            cmd.Parameters.AddWithValue("@KHOAHOC", string.IsNullOrWhiteSpace(cmbKhoaHoc1.Text) ? DBNull.Value : cmbKhoaHoc1.Text.Trim());
                             cmd.Parameters.AddWithValue("@BUOIHOC", string.IsNullOrWhiteSpace(txtBuoiHoc.Text) ? DBNull.Value : Convert.ToInt32(txtBuoiHoc.Text.Trim()));
                             cmd.ExecuteNonQuery();
                         }
@@ -760,7 +787,7 @@ namespace TuDienChuyenNganhCyberSecurity
                                     cmd.Parameters.AddWithValue("@GHICHU", txtGhiChu.Text.Trim());
                                 }
                                 cmd.Parameters.AddWithValue("@LINHVUC", cmbLinhVuc1.Text.Trim());
-                                cmd.Parameters.AddWithValue("@KHOAHOC", string.IsNullOrWhiteSpace(cmbKhoaHoc.Text) ? DBNull.Value : cmbKhoaHoc.Text.Trim());
+                                cmd.Parameters.AddWithValue("@KHOAHOC", string.IsNullOrWhiteSpace(cmbKhoaHoc1.Text) ? DBNull.Value : cmbKhoaHoc1.Text.Trim());
                                 cmd.Parameters.AddWithValue("@BUOIHOC", string.IsNullOrWhiteSpace(txtBuoiHoc.Text) ? DBNull.Value : Convert.ToInt32(txtBuoiHoc.Text.Trim()));
                                 cmd.ExecuteNonQuery();
                             }
@@ -790,7 +817,7 @@ namespace TuDienChuyenNganhCyberSecurity
                                     cmd.Parameters.AddWithValue("@GHICHU", txtGhiChu.Text.Trim());
                                 }
                                 cmd.Parameters.AddWithValue("@LINHVUC", cmbLinhVuc1.Text.Trim());
-                                cmd.Parameters.AddWithValue("@KHOAHOC", string.IsNullOrWhiteSpace(cmbKhoaHoc.Text) ? DBNull.Value : cmbKhoaHoc.Text.Trim());
+                                cmd.Parameters.AddWithValue("@KHOAHOC", string.IsNullOrWhiteSpace(cmbKhoaHoc1.Text) ? DBNull.Value : cmbKhoaHoc1.Text.Trim());
                                 cmd.Parameters.AddWithValue("@BUOIHOC", string.IsNullOrWhiteSpace(txtBuoiHoc.Text) ? DBNull.Value : Convert.ToInt32(txtBuoiHoc.Text.Trim()));
                                 cmd.ExecuteNonQuery();
                             }
@@ -1464,6 +1491,10 @@ namespace TuDienChuyenNganhCyberSecurity
         {
             if (isLoading) return;
             isLoading = true;
+            if (cmbKhoaHoc.SelectedIndex !=-1 && cmbKhoaHoc.SelectedValue != null)
+            {
+                lastCourse = cmbKhoaHoc.SelectedValue.ToString();
+            }
             if (cmbKhoaHoc.SelectedIndex > 0 && cmbKhoaHoc.SelectedValue.ToString() != "--blank--" && Program.ComboBoxCoGiaTri(cmbKhoaHoc, "KhoaHoc", cmbKhoaHoc.Text.Trim()))
             {
                 cmbLinhVuc.SelectedIndex = 0; 
@@ -1604,6 +1635,15 @@ namespace TuDienChuyenNganhCyberSecurity
 
         private void btnLoc_Click(object sender, EventArgs e)
         {
+            if (isLoading) return;
+            if(cmbFrom.SelectedIndex !=-1 && cmbFrom.SelectedValue != null)
+            {
+                lastFrom = cmbFrom.SelectedValue.ToString();
+            }
+            if (cmbTo.SelectedIndex != -1 && cmbTo.SelectedValue != null)
+            {
+                lastTo = cmbTo.SelectedValue.ToString();
+            }
             int fromValue = int.Parse(cmbFrom.SelectedValue.ToString());
             int toValue = int.Parse(cmbTo.SelectedValue.ToString());
             if (fromValue > toValue)
