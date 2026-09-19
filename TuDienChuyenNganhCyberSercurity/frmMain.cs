@@ -1016,6 +1016,7 @@ namespace TuDienChuyenNganhCyberSecurity
                 linhvuc = cmbLinhVuc.SelectedValue == null ? "Tất cả" : cmbLinhVuc.SelectedValue.ToString(); 
                 cmbKhoaHoc.SelectedValue = "Tất cả";
                 cmbKhoaHoc.BackColor = Color.White;
+                lastCourse = cmbKhoaHoc.SelectedValue.ToString();
                 dgvDSTU.Columns["BuoiHoc"].Visible = dgvDSTU.Columns["KhoaHoc"].Visible = false;
                 dgvDSTU.Columns["Linhvuc"].Visible = true;
                 lbFrom.Visible = lbTo.Visible = cmbFrom.Visible = cmbTo.Visible = btnLoc.Visible = false;
@@ -1234,22 +1235,34 @@ namespace TuDienChuyenNganhCyberSecurity
 
         private void btnPrePage_Click(object sender, EventArgs e)
         {
-            if (currentPage > 1) DisplayPage(currentPage - 1);
+            if (currentPage > 1)
+            {
+                currentPage--;
+                DisplayPage(currentPage);
+            }
+            
         }
 
         private void btnFirstPage_Click(object sender, EventArgs e)
         {
-            DisplayPage(1);
+            currentPage = 1;
+            DisplayPage(currentPage);
         }
 
         private void btnNextPage_Click(object sender, EventArgs e)
         {
-            if (currentPage < totalPages) DisplayPage(currentPage + 1);
+            if (currentPage < totalPages)
+            {
+                currentPage++;
+                DisplayPage(currentPage);
+            }
+            
         }
 
         private void btnLastPage_Click(object sender, EventArgs e)
         {
-            DisplayPage(totalPages);
+            currentPage = totalPages;
+            DisplayPage(currentPage);
         }
 
         private void txtPage_KeyDown(object sender, KeyEventArgs e)
@@ -1268,14 +1281,15 @@ namespace TuDienChuyenNganhCyberSecurity
                 txtPage.Text = $"{currentPage}/{totalPages}";
                 return;
             }
-            if (targetPage < 1 || targetPage > totalPages)
+            if (targetPage < 1 || targetPage > totalPages || targetPage == currentPage)
             {
                 txtPage.Text = $"{currentPage}/{totalPages}";
                 return;
             }
             if (targetPage != currentPage)
             {
-                DisplayPage(targetPage);
+                currentPage = targetPage;
+                DisplayPage(currentPage);
             }
         }
 
