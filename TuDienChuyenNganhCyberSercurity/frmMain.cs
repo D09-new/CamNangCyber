@@ -23,6 +23,7 @@ namespace TuDienChuyenNganhCyberSecurity
         bool isUpdate = false;
         bool isLoading = false;
         bool isSearching = false;
+        bool isPageLoading = false;
         string linhvuc = "Tất cả";
         string tuviettat = "";
         string tudaydu = "";
@@ -1169,6 +1170,7 @@ namespace TuDienChuyenNganhCyberSecurity
 
         private void DisplayPage(int page)
         {
+            isPageLoading = true;
             if (dtOriginal == null || dtOriginal.Rows.Count == 0) return;
 
             //Khởi tạo DataView từ DataTable gốc để Lọc và Sắp xếp
@@ -1231,10 +1233,12 @@ namespace TuDienChuyenNganhCyberSecurity
             currentPage = page;
             // Cập nhật giao diện (Ví dụ: "Trang 1 / 10")
             txtPage.Text = $"{currentPage}/{totalPages}";
+            isPageLoading = false;
         }
 
         private void btnPrePage_Click(object sender, EventArgs e)
         {
+            if (isPageLoading) return; // Nếu đang load trang, không thực hiện hành động
             if (currentPage > 1)
             {
                 currentPage--;
@@ -1245,12 +1249,17 @@ namespace TuDienChuyenNganhCyberSecurity
 
         private void btnFirstPage_Click(object sender, EventArgs e)
         {
-            currentPage = 1;
-            DisplayPage(currentPage);
+            if (isPageLoading) return; // Nếu đang load trang, không thực hiện hành động
+            if (currentPage != 1)
+            {
+                currentPage = 1;
+                DisplayPage(currentPage);
+            }
         }
 
         private void btnNextPage_Click(object sender, EventArgs e)
         {
+            if (isPageLoading) return; // Nếu đang load trang, không thực hiện hành động
             if (currentPage < totalPages)
             {
                 currentPage++;
@@ -1261,8 +1270,11 @@ namespace TuDienChuyenNganhCyberSecurity
 
         private void btnLastPage_Click(object sender, EventArgs e)
         {
-            currentPage = totalPages;
-            DisplayPage(currentPage);
+            if(currentPage != totalPages)
+            {
+                currentPage = totalPages;
+                DisplayPage(currentPage);
+            }
         }
 
         private void txtPage_KeyDown(object sender, KeyEventArgs e)
@@ -1275,7 +1287,7 @@ namespace TuDienChuyenNganhCyberSecurity
         }
 
         private void txtPage_Leave(object sender, EventArgs e)
-        {
+        {    
             if (!int.TryParse(txtPage.Text, out int targetPage))
             {
                 txtPage.Text = $"{currentPage}/{totalPages}";
@@ -1286,6 +1298,7 @@ namespace TuDienChuyenNganhCyberSecurity
                 txtPage.Text = $"{currentPage}/{totalPages}";
                 return;
             }
+            if (isPageLoading) return; // Nếu đang load trang, không thực hiện hành động
             if (targetPage != currentPage)
             {
                 currentPage = targetPage;
@@ -1653,11 +1666,29 @@ namespace TuDienChuyenNganhCyberSecurity
 
         private void cmbFrom_Leave(object sender, EventArgs e)
         {
-            if (!Program.ComboBoxCoGiaTri(cmbFrom, "BuoiHoc", cmbFrom.Text.Trim()))
+            if (int.TryParse(cmbTo.Text, out int result) && result < 1 )
             {
-                cmbFrom.SelectedIndex = 0;
+                cmbTo.SelectedValue = "1";
+                cmbTo.Focus();
+                cmbTo.SelectionStart = cmbTo.Text.Length; // Đặt con trỏ ở cuối
+            }
+            else if (result > buoiHocMax)
+            {
+                cmbTo.SelectedValue = buoiHocMax.ToString();
+                cmbTo.Focus();
+                cmbTo.SelectionStart = cmbTo.Text.Length; // Đặt con trỏ ở cuối
+            }
+            if (int.TryParse(cmbFrom.Text, out int result1) && result1 < 1 )
+            {
+                cmbFrom.SelectedValue = "1";
                 cmbFrom.Focus();
-                MessageBox.Show("Giá trị không hợp lệ. Vui lòng chọn từ danh sách", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                cmbFrom.SelectionStart = cmbFrom.Text.Length; // Đặt con trỏ ở cuối
+            }
+            else if (result1 > buoiHocMax)
+            {
+                cmbFrom.SelectedValue = buoiHocMax.ToString();
+                cmbFrom.Focus();
+                cmbFrom.SelectionStart = cmbFrom.Text.Length; // Đặt con trỏ ở cuối
             }
         }
 
@@ -1694,12 +1725,6 @@ namespace TuDienChuyenNganhCyberSecurity
             {
                 e.Handled = true;
             }
-            else if (int.TryParse(cmbTo.Text + e.KeyChar, out int result) && result > buoiHocMax)
-            {
-                e.Handled = true;
-                cmbTo.SelectedValue = buoiHocMax.ToString();
-                cmbTo.SelectionStart = cmbTo.Text.Length; // Đặt con trỏ ở cuối
-            }
         }
 
         private void cmbFrom_KeyPress(object sender, KeyPressEventArgs e)
@@ -1708,12 +1733,7 @@ namespace TuDienChuyenNganhCyberSecurity
             {
                 e.Handled = true;
             }
-            else if (int.TryParse(cmbTo.Text + e.KeyChar, out int result) && result > buoiHocMax)
-            {
-                e.Handled = true;
-                cmbFrom.SelectedValue = buoiHocMax.ToString();
-                cmbFrom.SelectionStart = cmbFrom.Text.Length; // Đặt con trỏ ở cuối
-            }
         }
+
     }
 }

@@ -847,6 +847,7 @@
             cmbTo.Visible = false;
             cmbTo.KeyDown += cmbTo_KeyDown;
             cmbTo.KeyPress += cmbTo_KeyPress;
+            cmbTo.Leave += cmbFrom_Leave;
             // 
             // lbTo
             // 

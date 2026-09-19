@@ -6,6 +6,15 @@ using System.Runtime.CompilerServices;
 using System.Data.SQLite;
 namespace TuDienChuyenNganhCyberSecurity
 {
+    public static class ButtonExtensions
+    {
+        public static async void Cooldown(this Control control, int milliseconds)
+        {
+            control.Enabled = false;
+            await Task.Delay(milliseconds);
+            control.Enabled = true;
+        }
+    }
     internal static class Program
     {
 
@@ -31,6 +40,7 @@ namespace TuDienChuyenNganhCyberSecurity
         //        return 0;
         //    }
         //}
+        
         public static bool ComboBoxCoGiaTri(ComboBox cmb, string tenCot, string giaTriCanTim)
         {
             foreach (object item in cmb.Items)
