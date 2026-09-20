@@ -85,7 +85,7 @@ namespace TuDienChuyenNganhCyberSecurity
                         cmbTuVietTat.DisplayMember = "TuVietTat";
                         cmbTuVietTat.ValueMember = "ID";
                         cmbTuVietTat.SelectedIndex = -1;
-                        dgvDSTU.DataSource = bds_dstu;
+                        dgvDSTU.DataSource = bds_dstu; //bds_dstu được tải dữ liệu ở hàm DisplayPage
                     }
                     using (var cmd2 = new SQLiteCommand(query2, connection))
                     {
@@ -321,6 +321,8 @@ namespace TuDienChuyenNganhCyberSecurity
                     btnTraCuu.Text = "Tra cứu";
                     lbTuDayDu.Visible = cmbTuDayDu.Visible = lbTuVietTat.Visible = cmbTuVietTat.Visible = false;
                     btnThem.Enabled = btnLuu.Enabled = btnXoa.Enabled = dgvDSTU.Enabled = true;
+                    cmbTuDayDu.SelectedIndex = -1;
+                    cmbTuVietTat.SelectedIndex = -1;
                     isSearching = false;
                     panelLoc.Visible = true;
                 }
@@ -681,7 +683,7 @@ namespace TuDienChuyenNganhCyberSecurity
             txtGhiChu.ReadOnly = false;
             txtNoiDung.ReadOnly = false;
             lbKhoaHoc.Visible = cmbKhoaHoc1.Visible = lbBuoiHoc.Visible = txtBuoiHoc.Visible = panelFormatText.Visible = lbLinhVuc.Visible = cmbLinhVuc1.Visible = lbTuDayDu.Visible = txtTuDayDu.Visible = lbTuVietTat.Visible = txtTuVietTat.Visible = true;
-            txtTuVietTat.Focus();
+            txtNoiDung.Focus();
             txtNoiDung.BackColor = txtGhiChu.BackColor = Color.Thistle;
         }
 
@@ -1015,9 +1017,12 @@ namespace TuDienChuyenNganhCyberSecurity
             if (cmbLinhVuc.SelectedIndex != -1 && Program.ComboBoxCoGiaTri(cmbLinhVuc, "LINHVUC", cmbLinhVuc.Text.Trim()))
             {
                 linhvuc = cmbLinhVuc.SelectedValue == null ? "Tất cả" : cmbLinhVuc.SelectedValue.ToString(); 
-                cmbKhoaHoc.SelectedValue = "Tất cả";
-                cmbKhoaHoc.BackColor = Color.White;
-                lastCourse = cmbKhoaHoc.SelectedValue.ToString();
+                if(cmbKhoaHoc.SelectedIndex > 0) //Nếu đang lọc theo khóa học thì bỏ lọc khóa học
+                {
+                    cmbKhoaHoc.SelectedIndex = 0;
+                    cmbKhoaHoc.BackColor = Color.White;
+                    lastCourse = cmbKhoaHoc.SelectedValue.ToString(); //cập nhật lại khóa học cuối cùng để khi bỏ lọc thì vẫn giữ được khóa học đó
+                }
                 dgvDSTU.Columns["BuoiHoc"].Visible = dgvDSTU.Columns["KhoaHoc"].Visible = false;
                 dgvDSTU.Columns["Linhvuc"].Visible = true;
                 lbFrom.Visible = lbTo.Visible = cmbFrom.Visible = cmbTo.Visible = btnLoc.Visible = false;
@@ -1400,7 +1405,32 @@ namespace TuDienChuyenNganhCyberSecurity
 
             if (e.KeyCode == Keys.Escape) //Thoat khi dang tra cuu/them/sua
             {
-                if (isAdd || isUpdate || isSearching)
+                if (isSearching) //dang tim
+                {
+                    if(isUpdate) //dang hieu chinh khi tim
+                    {
+                        txtGhiChu.ReadOnly = true;
+                        txtNoiDung.ReadOnly = true;
+                        txtNoiDung.BackColor = txtGhiChu.BackColor = SystemColors.GradientInactiveCaption;
+                        lbKhoaHoc.Visible = cmbKhoaHoc1.Visible = lbBuoiHoc.Visible = txtBuoiHoc.Visible = lbLinhVuc.Visible = cmbLinhVuc1.Visible = txtTuDayDu.Visible = txtTuVietTat.Visible = false;
+                        btnTaiLai.Enabled = btnTraCuu.Enabled = btnThoat.Enabled = true;
+                        cmbTuVietTat.Visible = cmbTuDayDu.Visible = true;
+                        isUpdate = false;
+                    }
+                    else //chi tim kiem
+                    {
+                        e.SuppressKeyPress = true;
+                        btnTraCuu_Click(sender, e);
+                        if(cmbKhoaHoc.SelectedIndex >0) //nếu đang lọc thì giữ nguyên cấu hình lọc
+                        {
+                            cmbFrom.SelectedValue = lastFrom;
+                            cmbTo.SelectedValue = lastTo;
+                        }    
+                        e.Handled = true;
+                        isSearching = false;
+                    } 
+                }
+                else if (isAdd || isUpdate)
                 {
                     e.SuppressKeyPress = true;
                     btnPhucHoi_Click(sender, e);

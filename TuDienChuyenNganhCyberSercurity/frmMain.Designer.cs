@@ -478,7 +478,7 @@
             // 
             label5.AutoSize = true;
             label5.ForeColor = Color.White;
-            label5.Location = new Point(6, 6);
+            label5.Location = new Point(6, 8);
             label5.Name = "label5";
             label5.Size = new Size(84, 25);
             label5.TabIndex = 102;
@@ -488,7 +488,7 @@
             // 
             cmbLinhVuc.BackColor = Color.White;
             cmbLinhVuc.FormattingEnabled = true;
-            cmbLinhVuc.Location = new Point(96, 3);
+            cmbLinhVuc.Location = new Point(96, 5);
             cmbLinhVuc.Name = "cmbLinhVuc";
             cmbLinhVuc.Size = new Size(239, 33);
             cmbLinhVuc.TabIndex = 20;
@@ -535,7 +535,7 @@
             dgvDSTU.Columns.AddRange(new DataGridViewColumn[] { ID, TUVIETTAT, TUDAYDU, NOIDUNG, GHICHU, LINHVUC, CreatedDate, ModifiedDate, BUOIHOC, KHOAHOC });
             dgvDSTU.Dock = DockStyle.Fill;
             dgvDSTU.EnableHeadersVisualStyles = false;
-            dgvDSTU.Location = new Point(0, 128);
+            dgvDSTU.Location = new Point(0, 136);
             dgvDSTU.Name = "dgvDSTU";
             dgvDSTU.ReadOnly = true;
             dataGridViewCellStyle9.Alignment = DataGridViewContentAlignment.MiddleLeft;
@@ -551,7 +551,7 @@
             dataGridViewCellStyle10.SelectionForeColor = Color.White;
             dgvDSTU.RowsDefaultCellStyle = dataGridViewCellStyle10;
             dgvDSTU.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvDSTU.Size = new Size(822, 625);
+            dgvDSTU.Size = new Size(822, 617);
             dgvDSTU.TabIndex = 101;
             dgvDSTU.SelectionChanged += dgvDSTU_SelectionChanged;
             // 
@@ -771,7 +771,7 @@
             panel2.BorderStyle = BorderStyle.Fixed3D;
             panel2.Controls.Add(label3);
             panel2.Dock = DockStyle.Top;
-            panel2.Location = new Point(0, 88);
+            panel2.Location = new Point(0, 96);
             panel2.Name = "panel2";
             panel2.Size = new Size(822, 40);
             panel2.TabIndex = 100;
@@ -809,14 +809,14 @@
             panelLoc.Dock = DockStyle.Top;
             panelLoc.Location = new Point(0, 0);
             panelLoc.Name = "panelLoc";
-            panelLoc.Size = new Size(822, 88);
+            panelLoc.Size = new Size(822, 96);
             panelLoc.TabIndex = 102;
             // 
             // cmbKhoaHoc
             // 
             cmbKhoaHoc.BackColor = Color.White;
             cmbKhoaHoc.FormattingEnabled = true;
-            cmbKhoaHoc.Location = new Point(96, 44);
+            cmbKhoaHoc.Location = new Point(96, 52);
             cmbKhoaHoc.Name = "cmbKhoaHoc";
             cmbKhoaHoc.Size = new Size(239, 33);
             cmbKhoaHoc.TabIndex = 23;
@@ -828,7 +828,7 @@
             // 
             label10.AutoSize = true;
             label10.ForeColor = Color.White;
-            label10.Location = new Point(6, 47);
+            label10.Location = new Point(6, 55);
             label10.Name = "label10";
             label10.Size = new Size(92, 25);
             label10.TabIndex = 104;
@@ -840,7 +840,7 @@
             cmbTo.FormatString = "N0";
             cmbTo.FormattingEnabled = true;
             cmbTo.Items.AddRange(new object[] { "--None--", "Tăng dần", "Giảm dần" });
-            cmbTo.Location = new Point(633, 44);
+            cmbTo.Location = new Point(633, 52);
             cmbTo.Name = "cmbTo";
             cmbTo.Size = new Size(91, 33);
             cmbTo.TabIndex = 25;
@@ -853,7 +853,7 @@
             // 
             lbTo.AutoSize = true;
             lbTo.ForeColor = Color.White;
-            lbTo.Location = new Point(543, 47);
+            lbTo.Location = new Point(543, 55);
             lbTo.Name = "lbTo";
             lbTo.Size = new Size(89, 25);
             lbTo.TabIndex = 102;
@@ -865,7 +865,7 @@
             cmbNgaySua.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbNgaySua.FormattingEnabled = true;
             cmbNgaySua.Items.AddRange(new object[] { "--None--", "Tăng dần", "Giảm dần" });
-            cmbNgaySua.Location = new Point(679, 3);
+            cmbNgaySua.Location = new Point(679, 5);
             cmbNgaySua.Name = "cmbNgaySua";
             cmbNgaySua.Size = new Size(130, 33);
             cmbNgaySua.TabIndex = 22;
@@ -877,7 +877,7 @@
             cmbFrom.FormatString = "N0";
             cmbFrom.FormattingEnabled = true;
             cmbFrom.Items.AddRange(new object[] { "--None--", "Tăng dần", "Giảm dần" });
-            cmbFrom.Location = new Point(442, 44);
+            cmbFrom.Location = new Point(442, 52);
             cmbFrom.Name = "cmbFrom";
             cmbFrom.Size = new Size(95, 33);
             cmbFrom.TabIndex = 24;
@@ -890,7 +890,7 @@
             // 
             label2.AutoSize = true;
             label2.ForeColor = Color.White;
-            label2.Location = new Point(589, 6);
+            label2.Location = new Point(589, 8);
             label2.Name = "label2";
             label2.Size = new Size(92, 25);
             label2.TabIndex = 102;
@@ -900,7 +900,7 @@
             // 
             lbFrom.AutoSize = true;
             lbFrom.ForeColor = Color.White;
-            lbFrom.Location = new Point(352, 47);
+            lbFrom.Location = new Point(352, 55);
             lbFrom.Name = "lbFrom";
             lbFrom.Size = new Size(78, 25);
             lbFrom.TabIndex = 102;
@@ -914,7 +914,7 @@
             btnLoc.ImageAlign = ContentAlignment.MiddleRight;
             btnLoc.ImageIndex = 9;
             btnLoc.ImageList = imageList1;
-            btnLoc.Location = new Point(740, 44);
+            btnLoc.Location = new Point(740, 52);
             btnLoc.Margin = new Padding(4);
             btnLoc.Name = "btnLoc";
             btnLoc.Size = new Size(69, 32);
@@ -931,7 +931,7 @@
             cmbNgayTao.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbNgayTao.FormattingEnabled = true;
             cmbNgayTao.Items.AddRange(new object[] { "--None--", "Tăng dần", "Giảm dần" });
-            cmbNgayTao.Location = new Point(442, 3);
+            cmbNgayTao.Location = new Point(442, 5);
             cmbNgayTao.Name = "cmbNgayTao";
             cmbNgayTao.Size = new Size(126, 33);
             cmbNgayTao.TabIndex = 21;
@@ -941,7 +941,7 @@
             // 
             label1.AutoSize = true;
             label1.ForeColor = Color.White;
-            label1.Location = new Point(352, 6);
+            label1.Location = new Point(352, 8);
             label1.Name = "label1";
             label1.Size = new Size(90, 25);
             label1.TabIndex = 102;
