@@ -885,6 +885,14 @@ namespace TuDienChuyenNganhCyberSecurity
                         string query = "DELETE FROM TUDIEN WHERE ID = @ID";
                         using (SQLiteCommand cmd = new SQLiteCommand(query, connection))
                         {
+                            if(bds_dstu.Position > 0)
+                            {
+                                position = bds_dstu.Position - 1;
+                            }
+                            else
+                            {
+                                position = 0;
+                            }
                             DataRowView row = bds_dstu[bds_dstu.Position] as DataRowView;
                             cmd.Parameters.AddWithValue("@ID", row["ID"]);
                             cmd.ExecuteNonQuery();
@@ -1430,10 +1438,54 @@ namespace TuDienChuyenNganhCyberSecurity
                         isSearching = false;
                     } 
                 }
-                else if (isAdd || isUpdate)
+                else if (isAdd)
                 {
                     e.SuppressKeyPress = true;
-                    btnPhucHoi_Click(sender, e);
+                    if (cmbKhoaHoc.SelectedIndex > 0) //nếu đang lọc thì giữ nguyên cấu hình lọc
+                    {
+                        cmbFrom.SelectedValue = lastFrom;
+                        cmbTo.SelectedValue = lastTo;
+                    }
+                    //bat tat cac control
+                    txtGhiChu.ReadOnly = true;
+                    txtNoiDung.ReadOnly = true;
+                    panelLoc.Visible = dgvDSTU.Enabled = btnTraCuu.Enabled = btnCapNhat.Enabled = btnTaiLai.Enabled = btnXoa.Enabled = btnThoat.Enabled = true;
+                    txtNoiDung.BackColor = txtGhiChu.BackColor = SystemColors.GradientInactiveCaption;
+                    lbKhoaHoc.Visible = cmbKhoaHoc1.Visible = lbBuoiHoc.Visible = txtBuoiHoc.Visible = panelFormatText.Visible = lbLinhVuc.Visible = cmbLinhVuc1.Visible = lbTuDayDu.Visible = txtTuDayDu.Visible = lbTuVietTat.Visible = txtTuVietTat.Visible = false;
+                    //tat trang thai them
+                    isAdd = false;
+                    //hien thi lai tu dang xem
+                    if(position != -1)
+                    {
+                        DataRowView row = bds_dstu[position] as DataRowView;
+                        GanNoiDungRichTextBox(txtNoiDung, row["NoiDung"]);
+                        GanNoiDungRichTextBox(txtGhiChu, row["GhiChu"]);
+                    }
+                    e.Handled = true;
+                }
+                else if (isUpdate)
+                {
+                    e.SuppressKeyPress = true;
+                    if (cmbKhoaHoc.SelectedIndex > 0) //nếu đang lọc thì giữ nguyên cấu hình lọc
+                    {
+                        cmbFrom.SelectedValue = lastFrom;
+                        cmbTo.SelectedValue = lastTo;
+                    }
+                    //bat tat cac control
+                    txtGhiChu.ReadOnly = true;
+                    txtNoiDung.ReadOnly = true;
+                    panelLoc.Visible = dgvDSTU.Enabled = btnTraCuu.Enabled = btnThem.Enabled = btnTaiLai.Enabled = btnXoa.Enabled = btnThoat.Enabled = true;
+                    txtNoiDung.BackColor = txtGhiChu.BackColor = SystemColors.GradientInactiveCaption;
+                    lbKhoaHoc.Visible = cmbKhoaHoc1.Visible = lbBuoiHoc.Visible = txtBuoiHoc.Visible = panelFormatText.Visible = lbLinhVuc.Visible = cmbLinhVuc1.Visible = lbTuDayDu.Visible = txtTuDayDu.Visible = lbTuVietTat.Visible = txtTuVietTat.Visible = false;
+                    //tat trang thai update
+                    isUpdate = false;
+                    //hien thi lai tu dang xem
+                    if (position != -1)
+                    {
+                        DataRowView row = bds_dstu[position] as DataRowView;
+                        GanNoiDungRichTextBox(txtNoiDung, row["NoiDung"]);
+                        GanNoiDungRichTextBox(txtGhiChu, row["GhiChu"]);
+                    }
                     e.Handled = true;
                 }
             }
