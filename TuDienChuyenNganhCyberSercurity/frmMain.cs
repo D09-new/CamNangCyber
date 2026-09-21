@@ -546,7 +546,7 @@ namespace TuDienChuyenNganhCyberSecurity
                         }
                     }
                     DisplayPage(currentPage);
-                    if (position != -1)
+                    if (position != -1 && bds_dstu[position] != null)
                     {
                         DataRowView row = bds_dstu[position] as DataRowView;
                         cmbLinhVuc1.SelectedValue = row["LinhVuc"];
@@ -1342,16 +1342,15 @@ namespace TuDienChuyenNganhCyberSecurity
             symbolMenu.Show(btnSymbolMenu, new Point(0, btnSymbolMenu.Height));
         }
 
-        private void txtNoiDung_Leave(object sender, EventArgs e)
+        private void txtNoiDung_Leave(object sender, EventArgs e) //bắt sự kiện focus mất khi chèn ký tự để đưa focus về đúng ô text đang chèn
         {
-            targetRtb = txtNoiDung;
-            selectionStart = targetRtb.SelectionStart;
-            selectionLength = targetRtb.SelectionLength;
-
+                targetRtb = txtNoiDung;
+                selectionStart = targetRtb.SelectionStart;
+                selectionLength = targetRtb.SelectionLength;
         }
 
-        private void txtGhiChu_Leave(object sender, EventArgs e)
-        {
+        private void txtGhiChu_Leave(object sender, EventArgs e) //tương tự txtNoiDung_Leave
+        { 
             targetRtb = txtGhiChu;
             selectionStart = targetRtb.SelectionStart;
             selectionLength = targetRtb.SelectionLength;
@@ -1507,7 +1506,23 @@ namespace TuDienChuyenNganhCyberSecurity
             if (e.Alt && e.KeyCode == Keys.S)
             {
                 e.SuppressKeyPress = true;
-                btnShowSymbol_Click(sender, e);
+                if(btnShowSymbol.Text == "")
+                {
+                    return;
+                }
+                if (txtNoiDung.ContainsFocus)
+                {
+                    targetRtb = txtNoiDung;
+                    selectionStart = targetRtb.SelectionStart;
+                    selectionLength = targetRtb.SelectionLength;
+                }
+                else if (txtGhiChu.ContainsFocus)
+                {
+                    targetRtb = txtGhiChu;
+                    selectionStart = targetRtb.SelectionStart;
+                    selectionLength = targetRtb.SelectionLength;
+                }
+                InsertSymbol(btnShowSymbol.Text);
                 e.Handled = true;
             }
         }
