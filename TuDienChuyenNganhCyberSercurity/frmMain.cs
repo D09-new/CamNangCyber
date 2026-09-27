@@ -914,7 +914,7 @@ namespace TuDienChuyenNganhCyberSecurity
             {
                 e.SuppressKeyPress = true; // Chặn lệnh paste mặc định
 
-                if (Clipboard.ContainsText())
+                if (!txtNoiDung.ReadOnly && Clipboard.ContainsText())
                 {
                     string clipboardText = Clipboard.GetText();
 
@@ -963,7 +963,7 @@ namespace TuDienChuyenNganhCyberSecurity
             {
                 e.SuppressKeyPress = true; // Chặn lệnh paste mặc định
 
-                if (Clipboard.ContainsText())
+                if (!txtGhiChu.ReadOnly && Clipboard.ContainsText())
                 {
                     string clipboardText = Clipboard.GetText();
 
@@ -1726,7 +1726,7 @@ namespace TuDienChuyenNganhCyberSecurity
                 cmbKhoaHoc.Focus();
                 e.Handled = true; // Ngăn chặn sự kiện mặc định của phím Alt + Left Arrow
             }
-            if (e.Alt && e.KeyCode == Keys.Right)
+            if (e.Alt && e.KeyCode == Keys.Right || e.KeyCode == Keys.Enter)
             {
                 e.SuppressKeyPress = true; // Tắt tiếng bíp
                 cmbTo.Focus();
@@ -1763,7 +1763,7 @@ namespace TuDienChuyenNganhCyberSecurity
 
         private void cmbFrom_Leave(object sender, EventArgs e)
         {
-            if (int.TryParse(cmbTo.Text, out int result) && result < 1 )
+            if (int.TryParse(cmbTo.Text, out int result) && result < 1)
             {
                 cmbTo.SelectedValue = "1";
                 cmbTo.Focus();
@@ -1775,17 +1775,30 @@ namespace TuDienChuyenNganhCyberSecurity
                 cmbTo.Focus();
                 cmbTo.SelectionStart = cmbTo.Text.Length; // Đặt con trỏ ở cuối
             }
+            else if (cmbTo.Text.Trim() == "")
+            {
+                cmbTo.SelectedIndex = 0;
+            }
             if (int.TryParse(cmbFrom.Text, out int result1) && result1 < 1 )
             {
                 cmbFrom.SelectedValue = "1";
                 cmbFrom.Focus();
                 cmbFrom.SelectionStart = cmbFrom.Text.Length; // Đặt con trỏ ở cuối
             }
+            else if(result1 == buoiHocMax)
+            {
+                cmbTo.SelectedValue = buoiHocMax.ToString(); //Tự động cập nhật cmbTo
+                cmbTo.SelectionStart = cmbTo.Text.Length; // Đặt con trỏ ở cuối
+            }
             else if (result1 > buoiHocMax)
             {
                 cmbFrom.SelectedValue = buoiHocMax.ToString();
                 cmbFrom.Focus();
                 cmbFrom.SelectionStart = cmbFrom.Text.Length; // Đặt con trỏ ở cuối
+            }
+            else if (cmbFrom.Text.Trim() == "")
+            {
+                cmbFrom.SelectedIndex = 0;
             }
         }
 
