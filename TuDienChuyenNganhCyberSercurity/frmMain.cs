@@ -271,6 +271,7 @@ namespace TuDienChuyenNganhCyberSecurity
 
                 cell.Click += (s, ev) =>
                 {
+                    btnShowColor.BackColor = col; //Lưu lại màu đã chọn cho nút showcolor để tái sử dụng nếu cần
                     ChangeColor(col);
                     colorMenu.Close();
                 };
@@ -1104,7 +1105,7 @@ namespace TuDienChuyenNganhCyberSecurity
         private void ChangeColor(Color selectedColor)
         {
             // Đổi màu chữ của chính nút bấm để báo hiệu màu đang chọn
-            btnShowColor.BackColor = selectedColor;
+            //btnShowColor.BackColor = selectedColor;
             if (txtGhiChu.SelectionLength > 0)
             {
                 // Chỉ đổi màu đoạn văn bản đang được chọn
@@ -1495,11 +1496,40 @@ namespace TuDienChuyenNganhCyberSecurity
                 btnXoa_Click(sender, e);
                 e.Handled = true;
             }
-
+            //Đổi màu nhanh
+            //Đổi theo màu đã chọn trước đó
             if (e.Alt && e.KeyCode == Keys.C)
             {
                 e.SuppressKeyPress = true;
                 ChangeColor(btnShowColor.BackColor);
+                e.Handled = true;
+            }
+            //Đổi nhanh sang đen (default)
+            if (e.Alt && e.KeyCode == Keys.D)
+            {
+                e.SuppressKeyPress = true;
+                ChangeColor(Color.Black);
+                e.Handled = true;
+            }
+            //Đổi nhanh sang xanh biển (Blue)
+            if (e.Alt && e.KeyCode == Keys.B)
+            {
+                e.SuppressKeyPress = true;
+                ChangeColor(Color.Blue);
+                e.Handled = true;
+            }
+            //Đổi nhanh sang đỏ (Red)
+            if (e.Alt && e.KeyCode == Keys.R)
+            {
+                e.SuppressKeyPress = true;
+                ChangeColor(Color.Red);
+                e.Handled = true;
+            }
+            //Đổi nhanh sang xanh lá (Green)
+            if (e.Alt && e.KeyCode == Keys.G)
+            {
+                e.SuppressKeyPress = true;
+                ChangeColor(Color.Green);
                 e.Handled = true;
             }
 
@@ -1763,6 +1793,7 @@ namespace TuDienChuyenNganhCyberSecurity
 
         private void cmbFrom_Leave(object sender, EventArgs e)
         {
+            //Kiểm tra ràng buộc dữ liệu ở ô cmbTo
             if (int.TryParse(cmbTo.Text, out int result) && result < 1)
             {
                 cmbTo.SelectedValue = "1";
@@ -1775,10 +1806,18 @@ namespace TuDienChuyenNganhCyberSecurity
                 cmbTo.Focus();
                 cmbTo.SelectionStart = cmbTo.Text.Length; // Đặt con trỏ ở cuối
             }
-            else if (cmbTo.Text.Trim() == "")
+            else if (cmbTo.Text.Trim() == "") //chuỗi rỗng
             {
-                cmbTo.SelectedIndex = 0;
+                if(int.TryParse(cmbFrom.Text, out int value)) //nếu cmbFrom có giá trị hợp lệ thì gán cho cmbTo
+                {
+                    cmbTo.SelectedValue = value.ToString();
+                }
+                else //nếu không thì để giá trị mặc định
+                {
+                    cmbTo.SelectedIndex = 0;
+                }
             }
+            //kiểm tra ràng buộc dữ liệu ở ô cmbFrom
             if (int.TryParse(cmbFrom.Text, out int result1) && result1 < 1 )
             {
                 cmbFrom.SelectedValue = "1";
