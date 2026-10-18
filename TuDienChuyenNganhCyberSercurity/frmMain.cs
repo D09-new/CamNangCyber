@@ -326,9 +326,21 @@ namespace TuDienChuyenNganhCyberSecurity
                     cmbTuVietTat.SelectedIndex = -1;
                     isSearching = false;
                     panelLoc.Visible = true;
+                    if(position!=-1 && bds_dstu[position] != null)
+                    {
+                        DataRowView row = bds_dstu[position] as DataRowView;
+                        GanNoiDungRichTextBox(txtNoiDung, row["NoiDung"]);
+                        GanNoiDungRichTextBox(txtGhiChu, row["GhiChu"]);
+                    }
+                    else
+                    {
+                        txtNoiDung.Clear();
+                        txtGhiChu.Clear();
+                    }
                 }
                 else
                 {
+                    position = bds_dstu.Position;
                     panelLoc.Visible = false;
                     isSearching = true;
                     btnTraCuu.Text = "Kết thúc tra cứu";
