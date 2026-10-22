@@ -1234,7 +1234,12 @@ namespace TuDienChuyenNganhCyberSecurity
 
 
 
-
+            // Tính tổng số trang
+            totalPages = (int)Math.Ceiling((double)dtAfterFilterAndSort.Rows.Count / pageSize);
+            // Kiểm tra giới hạn trang
+            if (page < 1) page = 1;
+            if (page > totalPages) page = totalPages;
+            currentPage = page;
 
             // 3. Dùng LINQ lấy dữ liệu của trang hiện tại
             var pageRows = dtAfterFilterAndSort.AsEnumerable()
@@ -1251,12 +1256,7 @@ namespace TuDienChuyenNganhCyberSecurity
             {
                 bds_dstu.DataSource = dtOriginal.Clone(); // Trả về bảng trống nếu không có dữ liệu
             }
-            // Tính tổng số trang
-            totalPages = (int)Math.Ceiling((double)dtAfterFilterAndSort.Rows.Count / pageSize);
-            // Kiểm tra giới hạn trang
-            if (page < 1) page = 1;
-            if (page > totalPages) page = totalPages;
-            currentPage = page;
+            
             // Cập nhật giao diện (Ví dụ: "Trang 1 / 10")
             txtPage.Text = $"{currentPage}/{totalPages}";
             isPageLoading = false;
