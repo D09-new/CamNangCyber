@@ -684,6 +684,7 @@ namespace TuDienChuyenNganhCyberSecurity
             }
             else
             {
+                isUpdate = true;
                 DataRowView row = bds_dstu[bds_dstu.Position] as DataRowView;
                 tuviettat = txtTuVietTat.Text = row["TUVIETTAT"].ToString().Trim();
                 tudaydu = txtTuDayDu.Text = row["TUDAYDU"].ToString().Trim();
@@ -1196,6 +1197,7 @@ namespace TuDienChuyenNganhCyberSecurity
 
         private void DisplayPage(int page)
         {
+            if (isUpdate) return;
             isPageLoading = true;
             if (dtOriginal == null || dtOriginal.Rows.Count == 0) return;
 
