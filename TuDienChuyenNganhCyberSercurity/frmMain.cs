@@ -854,8 +854,8 @@ namespace TuDienChuyenNganhCyberSecurity
                         }
                     }
                     MessageBox.Show("Cập nhật từ thành công.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    Reload();
                     isUpdate = false;
+                    Reload();
                     txtGhiChu.ReadOnly = true;
                     txtNoiDung.ReadOnly = true;
                     panelLoc.Visible = dgvDSTU.Enabled = btnTraCuu.Enabled = btnThem.Enabled = btnTaiLai.Enabled = btnXoa.Enabled = btnThoat.Enabled = true;
