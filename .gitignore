@@ -370,5 +370,5 @@ FodyWeavers.xsd
 !TuDienChuyenNganhCyberSecurity/bin/
 
 # Cho phép Git theo dõi file database ở cả 2 nơi
-!TuDienChuyenNganhCyberSecurity/bin/Debug/TuDien.db
-!TuDienChuyenNganhCyberSecurity/bin/Release/TuDien.db
+!TuDienChuyenNganhCyberSecurity/bin/Debug/CamNangCS.db
+!TuDienChuyenNganhCyberSecurity/bin/Release/CamNangCS.db
