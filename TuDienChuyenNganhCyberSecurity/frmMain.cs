@@ -447,22 +447,33 @@ namespace TuDienChuyenNganhCyberSecurity
         private void frmMain_FormClosing(object sender, FormClosingEventArgs e)
         {
             // 1. Hỏi xem bạn có muốn backup dữ liệu trước khi thoát không
-            DialogResult result = MessageBox.Show("Bạn có muốn backup dữ liệu trước khi thoát không?", "Xác nhận", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+            DialogResult result = MessageBox.Show("Bạn có muốn sao lưu dữ liệu lên GitHub trước khi thoát không?", "Xác nhận", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
             // 2. Nếu người dùng chọn Yes, thực hiện backup dữ liệu
             if (result == DialogResult.Yes)
             {
+                // Vô hiệu hóa form chính trong khi backup
+                this.Enabled = false;
                 bool success = Program.PushDatabaseToGitHub();
-
-                if (!success)
+                if (success)
                 {
                     MessageBox.Show(
-                        "Backup thất bại!",
+                        "Sao lưu thành công!",
+                        "Thông báo",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information
+                    );
+                    
+                }
+                else
+                {
+                    MessageBox.Show(
+                        "Sao lưu thất bại! Nguyên nhân có thể là do dữ liệu không có thay đổi!",
                         "Thông báo",
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Error
                     );
-
                     e.Cancel = true; // Không thoát nếu backup thất bại
+                    this.Enabled = true; // Kích hoạt lại form chính
                 }
 
             }
@@ -475,6 +486,7 @@ namespace TuDienChuyenNganhCyberSecurity
             else
             {
                 e.Cancel = true; // Hủy đóng form
+                this.Enabled = true; // Kích hoạt lại form chính
             } 
         }
 
