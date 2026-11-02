@@ -361,3 +361,14 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# =======================================================
+# NGOẠI LỆ: CHO PHÉP PUSH FILE DATABASE ĐỂ NGƯỜI KHÁC TẢI VỀ DÙNG ĐƯỢC
+# =======================================================
+
+!TuDienChuyenNganhCyberSecurity/
+!TuDienChuyenNganhCyberSecurity/bin/
+
+# Cho phép Git theo dõi file database ở cả 2 nơi
+!TuDienChuyenNganhCyberSecurity/bin/Debug/TuDien.db
+!TuDienChuyenNganhCyberSecurity/bin/Release/TuDien.db
