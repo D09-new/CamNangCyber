@@ -1,11 +1,12 @@
-using System.Windows.Forms;
+using Microsoft.Data.SqlClient;
 using System;
 using System.Data;
-using Microsoft.Data.SqlClient;
-using System.Runtime.CompilerServices;
 using System.Data.SQLite;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.CompilerServices;
+using System.Text;
+using System.Windows.Forms;
 using System.Windows.Forms;
 namespace TuDienChuyenNganhCyberSecurity
 {
@@ -135,7 +136,8 @@ namespace TuDienChuyenNganhCyberSecurity
                 string commitMessage = $"Auto-backup database: {DateTime.Now:yyyy-MM-dd HH:mm:ss}";
 
                 // Chỉ add duy nhất file database ở thư mục đang chạy
-                string arguments = $"/c cd /d \"{repoPath}\" && git add \"{relativeDbPath}\" && git commit -m \"{commitMessage}\" && git push origin main";
+                // Thêm chcp 65001 && ở đầu để CMD ngầm đọc được đường dẫn tiếng Việt có dấu
+                string arguments = $"/c chcp 65001 && cd /d \"{repoPath}\" && git add -f \"{relativeDbPath}\" && git commit -m \"{commitMessage}\" && git push origin master";
 
                 ProcessStartInfo processInfo = new ProcessStartInfo
                 {
@@ -144,7 +146,9 @@ namespace TuDienChuyenNganhCyberSecurity
                     CreateNoWindow = true,       // Chạy ngầm hoàn toàn
                     UseShellExecute = false,
                     RedirectStandardError = true,
-                    RedirectStandardOutput = true
+                    RedirectStandardOutput = true,
+                    StandardOutputEncoding = System.Text.Encoding.UTF8,
+                    StandardErrorEncoding = System.Text.Encoding.UTF8
                 };
 
                 using (Process process = Process.Start(processInfo))
@@ -152,6 +156,117 @@ namespace TuDienChuyenNganhCyberSecurity
                     process.WaitForExit(); // Chờ Git xử lý xong
                     return process.ExitCode == 0;
                 }
+
+                //ProcessStartInfo processInfo = new ProcessStartInfo
+                //{
+                //    FileName = "cmd.exe",
+                //    Arguments = arguments,
+                //    WorkingDirectory = repoPath,
+                //    CreateNoWindow = true,
+                //    UseShellExecute = false,
+                //    RedirectStandardError = true,
+                //    RedirectStandardOutput = true,
+                //    RedirectStandardInput = true,
+                //    StandardOutputEncoding = System.Text.Encoding.UTF8,
+                //    StandardErrorEncoding = System.Text.Encoding.UTF8
+                //};
+
+                //// Không cho Git yêu cầu nhập mật khẩu trong CMD ẩn
+                //processInfo.EnvironmentVariables["GIT_TERMINAL_PROMPT"] = "0";
+
+                //// Tránh chờ vô hạn nếu có chương trình hỏi tương tác
+                //processInfo.EnvironmentVariables["GCM_INTERACTIVE"] = "Never";
+
+                //StringBuilder output = new StringBuilder();
+                //StringBuilder error = new StringBuilder();
+
+                //using (Process process = new Process())
+                //{
+                //    process.StartInfo = processInfo;
+
+                //    // Đọc StandardOutput bất đồng bộ
+                //    process.OutputDataReceived += (sender, e) =>
+                //    {
+                //        if (e.Data != null)
+                //        {
+                //            lock (output)
+                //            {
+                //                output.AppendLine(e.Data);
+                //            }
+                //        }
+                //    };
+
+                //    // Đọc StandardError bất đồng bộ
+                //    process.ErrorDataReceived += (sender, e) =>
+                //    {
+                //        if (e.Data != null)
+                //        {
+                //            lock (error)
+                //            {
+                //                error.AppendLine(e.Data);
+                //            }
+                //        }
+                //    };
+
+                //    process.Start();
+                //    process.StandardInput.Close();
+
+                //    process.BeginOutputReadLine();
+                //    process.BeginErrorReadLine();
+
+                //    // Chờ tối đa 30 giây
+                //    bool finished = process.WaitForExit(30000);
+
+                //    if (!finished)
+                //    {
+                //        try
+                //        {
+                //            process.Kill();
+                //            process.WaitForExit();
+                //        }
+                //        catch { }
+
+                //        MessageBox.Show(
+                //            "Git chạy quá 30 giây.\n" +
+                //            "Có thể git push đang bị treo hoặc chờ xác thực.\n\n" +
+                //            "Output:\n" + output.ToString() +
+                //            "\nError:\n" + error.ToString(),
+                //            "Git Timeout",
+                //            MessageBoxButtons.OK,
+                //            MessageBoxIcon.Error);
+
+                //        return false;
+                //    }
+
+                //    // Đảm bảo các sự kiện đọc output hoàn tất
+                //    process.WaitForExit();
+
+                //    int exitCode = process.ExitCode;
+
+                //    if (exitCode != 0)
+                //    {
+                //        MessageBox.Show(
+                //            "Git thực thi thất bại!\n\n" +
+                //            "ExitCode: " + exitCode +
+                //            "\n\nOutput:\n" + output.ToString() +
+                //            "\nError:\n" + error.ToString(),
+                //            "Lỗi Git",
+                //            MessageBoxButtons.OK,
+                //            MessageBoxIcon.Error);
+
+                //        return false;
+                //    }
+
+                //    MessageBox.Show(
+                //        "Git thực thi thành công!\n\n" +
+                //        output.ToString(),
+                //        "Git Result",
+                //        MessageBoxButtons.OK,
+                //        MessageBoxIcon.Information);
+
+                //    return true;
+                //}
+
             }
             catch (Exception ex)
             {

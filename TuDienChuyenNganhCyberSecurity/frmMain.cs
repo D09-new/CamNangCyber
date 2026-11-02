@@ -446,22 +446,36 @@ namespace TuDienChuyenNganhCyberSecurity
 
         private void frmMain_FormClosing(object sender, FormClosingEventArgs e)
         {
-            // 1. Hỏi xem có chắc chắn muốn thoát không
-            if (MessageBox.Show("Bạn có chắc chắn muốn thoát không?", "Xác nhận", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
+            // 1. Hỏi xem bạn có muốn backup dữ liệu trước khi thoát không
+            DialogResult result = MessageBox.Show("Bạn có muốn backup dữ liệu trước khi thoát không?", "Xác nhận", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+            // 2. Nếu người dùng chọn Yes, thực hiện backup dữ liệu
+            if (result == DialogResult.Yes)
             {
-                // 2. Hỏi xem có muốn backup dữ liệu không
-                if (MessageBox.Show("Bạn có muốn backup dữ liệu lên github?", "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                bool success = Program.PushDatabaseToGitHub();
+
+                if (!success)
                 {
-                    Program.PushDatabaseToGitHub();
+                    MessageBox.Show(
+                        "Backup thất bại!",
+                        "Thông báo",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error
+                    );
+
+                    e.Cancel = true; // Không thoát nếu backup thất bại
                 }
 
-                // Cho phép Form đóng bình thường
             }
+            // 3. Nếu người dùng chọn No thì chỉ thoát và không backup dữ liệu, không làm gì, tự đóng
+            else if (result == DialogResult.No)
+            {
+                
+            }
+            // 4. Nếu người dùng chọn Cancel thì hủy đóng form
             else
             {
-                // Nếu người dùng chọn Cancel ở câu hỏi 1, hủy lệnh đóng Form (ở lại phần mềm)
-                e.Cancel = true;
-            }
+                e.Cancel = true; // Hủy đóng form
+            } 
         }
 
         private void Reload()
