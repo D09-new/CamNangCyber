@@ -1220,6 +1220,7 @@
             Margin = new Padding(4);
             Name = "frmMain";
             Text = "Cẩm nang Cyber";
+            FormClosing += frmMain_FormClosing;
             Load += frmMain_Load;
             KeyDown += frmMain_KeyDown;
             flowPanel.ResumeLayout(false);

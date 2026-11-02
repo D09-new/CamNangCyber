@@ -326,7 +326,7 @@ namespace TuDienChuyenNganhCyberSecurity
                     cmbTuVietTat.SelectedIndex = -1;
                     isSearching = false;
                     panelLoc.Visible = true;
-                    if(position!=-1 && bds_dstu[position] != null)
+                    if (position != -1 && bds_dstu[position] != null)
                     {
                         DataRowView row = bds_dstu[position] as DataRowView;
                         GanNoiDungRichTextBox(txtNoiDung, row["NoiDung"]);
@@ -441,10 +441,28 @@ namespace TuDienChuyenNganhCyberSecurity
 
         private void btnThoat_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Bạn có chắc chắn muốn thoát không?", "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                this.Close();
+            this.Close();
         }
 
+        private void frmMain_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            // 1. Hỏi xem có chắc chắn muốn thoát không
+            if (MessageBox.Show("Bạn có chắc chắn muốn thoát không?", "Xác nhận", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
+            {
+                // 2. Hỏi xem có muốn backup dữ liệu không
+                if (MessageBox.Show("Bạn có muốn backup dữ liệu lên github?", "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    Program.PushDatabaseToGitHub();
+                }
+
+                // Cho phép Form đóng bình thường
+            }
+            else
+            {
+                // Nếu người dùng chọn Cancel ở câu hỏi 1, hủy lệnh đóng Form (ở lại phần mềm)
+                e.Cancel = true;
+            }
+        }
 
         private void Reload()
         {
@@ -519,7 +537,7 @@ namespace TuDienChuyenNganhCyberSecurity
                         cmbKhoaHoc.DataSource = bds_dskhoahoc;
                         cmbKhoaHoc.DisplayMember = "KHOAHOC";
                         cmbKhoaHoc.ValueMember = "KHOAHOC";
-                        if(lastCourse != "Tất cả")
+                        if (lastCourse != "Tất cả")
                         {
                             cmbKhoaHoc.SelectedValue = lastCourse;
                         }
@@ -899,7 +917,7 @@ namespace TuDienChuyenNganhCyberSecurity
                         string query = "DELETE FROM TUDIEN WHERE ID = @ID";
                         using (SQLiteCommand cmd = new SQLiteCommand(query, connection))
                         {
-                            if(bds_dstu.Position > 0)
+                            if (bds_dstu.Position > 0)
                             {
                                 position = bds_dstu.Position - 1;
                             }
@@ -1038,8 +1056,8 @@ namespace TuDienChuyenNganhCyberSecurity
             isLoading = true;
             if (cmbLinhVuc.SelectedIndex != -1 && Program.ComboBoxCoGiaTri(cmbLinhVuc, "LINHVUC", cmbLinhVuc.Text.Trim()))
             {
-                linhvuc = cmbLinhVuc.SelectedValue == null ? "Tất cả" : cmbLinhVuc.SelectedValue.ToString(); 
-                if(cmbKhoaHoc.SelectedIndex > 0) //Nếu đang lọc theo khóa học thì bỏ lọc khóa học
+                linhvuc = cmbLinhVuc.SelectedValue == null ? "Tất cả" : cmbLinhVuc.SelectedValue.ToString();
+                if (cmbKhoaHoc.SelectedIndex > 0) //Nếu đang lọc theo khóa học thì bỏ lọc khóa học
                 {
                     cmbKhoaHoc.SelectedIndex = 0;
                     cmbKhoaHoc.BackColor = Color.White;
@@ -1208,7 +1226,7 @@ namespace TuDienChuyenNganhCyberSecurity
             string khoaHocVal = cmbKhoaHoc.SelectedValue?.ToString();
             string khoaHocText = cmbKhoaHoc.Text; // .Text luôn trả về chuỗi (rỗng hoặc có chữ), không bị null
             //Xử lý chức năng LỌC (Filter) theo cột Lĩnh Vực
-            if (linhVucVal !=null && linhVucVal != "Tất cả")
+            if (linhVucVal != null && linhVucVal != "Tất cả")
             {
                 dataView.RowFilter = $"LinhVuc = '{linhVucVal.Replace("'", "''")}'";
             }
@@ -1227,7 +1245,7 @@ namespace TuDienChuyenNganhCyberSecurity
             // Không lọc nếu cả lĩnh vực và khóa học đều chọn "Tất cả"
             else
             {
-                dataView.RowFilter = string.Empty; 
+                dataView.RowFilter = string.Empty;
             }
 
             dataView.Sort = kieuSapXep;
@@ -1258,7 +1276,7 @@ namespace TuDienChuyenNganhCyberSecurity
             {
                 bds_dstu.DataSource = dtOriginal.Clone(); // Trả về bảng trống nếu không có dữ liệu
             }
-            
+
             // Cập nhật giao diện (Ví dụ: "Trang 1 / 10")
             txtPage.Text = $"{currentPage}/{totalPages}";
             isPageLoading = false;
@@ -1272,7 +1290,7 @@ namespace TuDienChuyenNganhCyberSecurity
                 currentPage--;
                 DisplayPage(currentPage);
             }
-            
+
         }
 
         private void btnFirstPage_Click(object sender, EventArgs e)
@@ -1293,12 +1311,12 @@ namespace TuDienChuyenNganhCyberSecurity
                 currentPage++;
                 DisplayPage(currentPage);
             }
-            
+
         }
 
         private void btnLastPage_Click(object sender, EventArgs e)
         {
-            if(currentPage != totalPages)
+            if (currentPage != totalPages)
             {
                 currentPage = totalPages;
                 DisplayPage(currentPage);
@@ -1315,7 +1333,7 @@ namespace TuDienChuyenNganhCyberSecurity
         }
 
         private void txtPage_Leave(object sender, EventArgs e)
-        {    
+        {
             if (!int.TryParse(txtPage.Text, out int targetPage))
             {
                 txtPage.Text = $"{currentPage}/{totalPages}";
@@ -1359,13 +1377,13 @@ namespace TuDienChuyenNganhCyberSecurity
 
         private void txtNoiDung_Leave(object sender, EventArgs e) //bắt sự kiện focus mất khi chèn ký tự để đưa focus về đúng ô text đang chèn
         {
-                targetRtb = txtNoiDung;
-                selectionStart = targetRtb.SelectionStart;
-                selectionLength = targetRtb.SelectionLength;
+            targetRtb = txtNoiDung;
+            selectionStart = targetRtb.SelectionStart;
+            selectionLength = targetRtb.SelectionLength;
         }
 
         private void txtGhiChu_Leave(object sender, EventArgs e) //tương tự txtNoiDung_Leave
-        { 
+        {
             targetRtb = txtGhiChu;
             selectionStart = targetRtb.SelectionStart;
             selectionLength = targetRtb.SelectionLength;
@@ -1429,7 +1447,7 @@ namespace TuDienChuyenNganhCyberSecurity
             {
                 if (isSearching) //dang tim
                 {
-                    if(isUpdate) //dang hieu chinh khi tim
+                    if (isUpdate) //dang hieu chinh khi tim
                     {
                         txtGhiChu.ReadOnly = true;
                         txtNoiDung.ReadOnly = true;
@@ -1443,14 +1461,14 @@ namespace TuDienChuyenNganhCyberSecurity
                     {
                         e.SuppressKeyPress = true;
                         btnTraCuu_Click(sender, e);
-                        if(cmbKhoaHoc.SelectedIndex >0) //nếu đang lọc thì giữ nguyên cấu hình lọc
+                        if (cmbKhoaHoc.SelectedIndex > 0) //nếu đang lọc thì giữ nguyên cấu hình lọc
                         {
                             cmbFrom.SelectedValue = lastFrom;
                             cmbTo.SelectedValue = lastTo;
-                        }    
+                        }
                         e.Handled = true;
                         isSearching = false;
-                    } 
+                    }
                 }
                 else if (isAdd)
                 {
@@ -1469,7 +1487,7 @@ namespace TuDienChuyenNganhCyberSecurity
                     //tat trang thai them
                     isAdd = false;
                     //hien thi lai tu dang xem
-                    if(position != -1)
+                    if (position != -1)
                     {
                         DataRowView row = bds_dstu[position] as DataRowView;
                         GanNoiDungRichTextBox(txtNoiDung, row["NoiDung"]);
@@ -1550,7 +1568,7 @@ namespace TuDienChuyenNganhCyberSecurity
             if (e.Alt && e.KeyCode == Keys.S)
             {
                 e.SuppressKeyPress = true;
-                if(btnShowSymbol.Text == "")
+                if (btnShowSymbol.Text == "")
                 {
                     return;
                 }
@@ -1673,13 +1691,13 @@ namespace TuDienChuyenNganhCyberSecurity
         {
             if (isLoading) return;
             isLoading = true;
-            if (cmbKhoaHoc.SelectedIndex !=-1 && cmbKhoaHoc.SelectedValue != null)
+            if (cmbKhoaHoc.SelectedIndex != -1 && cmbKhoaHoc.SelectedValue != null)
             {
                 lastCourse = cmbKhoaHoc.SelectedValue.ToString();
             }
             if (cmbKhoaHoc.SelectedIndex > 0 && cmbKhoaHoc.SelectedValue.ToString() != "--blank--" && Program.ComboBoxCoGiaTri(cmbKhoaHoc, "KhoaHoc", cmbKhoaHoc.Text.Trim()))
             {
-                cmbLinhVuc.SelectedIndex = 0; 
+                cmbLinhVuc.SelectedIndex = 0;
                 cmbKhoaHoc.BackColor = Color.PapayaWhip;
                 string query = "SELECT BUOIHOC FROM TUDIEN WHERE KHOAHOC = @KHOAHOC GROUP BY BUOIHOC";
                 using (var connection = new SQLiteConnection(Program.connectionString))
@@ -1717,7 +1735,7 @@ namespace TuDienChuyenNganhCyberSecurity
             }
             else
             {
-                if(cmbKhoaHoc.Text == "--blank--")
+                if (cmbKhoaHoc.Text == "--blank--")
                 {
                     cmbLinhVuc.SelectedIndex = 0;
                 }
@@ -1822,7 +1840,7 @@ namespace TuDienChuyenNganhCyberSecurity
             }
             else if (cmbTo.Text.Trim() == "") //chuỗi rỗng
             {
-                if(int.TryParse(cmbFrom.Text, out int value)) //nếu cmbFrom có giá trị hợp lệ thì gán cho cmbTo
+                if (int.TryParse(cmbFrom.Text, out int value)) //nếu cmbFrom có giá trị hợp lệ thì gán cho cmbTo
                 {
                     cmbTo.SelectedValue = value.ToString();
                 }
@@ -1832,13 +1850,13 @@ namespace TuDienChuyenNganhCyberSecurity
                 }
             }
             //kiểm tra ràng buộc dữ liệu ở ô cmbFrom
-            if (int.TryParse(cmbFrom.Text, out int result1) && result1 < 1 )
+            if (int.TryParse(cmbFrom.Text, out int result1) && result1 < 1)
             {
                 cmbFrom.SelectedValue = "1";
                 cmbFrom.Focus();
                 cmbFrom.SelectionStart = cmbFrom.Text.Length; // Đặt con trỏ ở cuối
             }
-            else if(result1 == buoiHocMax)
+            else if (result1 == buoiHocMax)
             {
                 cmbTo.SelectedValue = buoiHocMax.ToString(); //Tự động cập nhật cmbTo
                 cmbTo.SelectionStart = cmbTo.Text.Length; // Đặt con trỏ ở cuối
@@ -1858,7 +1876,7 @@ namespace TuDienChuyenNganhCyberSecurity
         private void btnLoc_Click(object sender, EventArgs e)
         {
             if (isLoading) return;
-            if(cmbFrom.SelectedIndex !=-1 && cmbFrom.SelectedValue != null)
+            if (cmbFrom.SelectedIndex != -1 && cmbFrom.SelectedValue != null)
             {
                 lastFrom = cmbFrom.SelectedValue.ToString();
             }
@@ -1898,5 +1916,6 @@ namespace TuDienChuyenNganhCyberSecurity
             }
         }
 
+        
     }
 }

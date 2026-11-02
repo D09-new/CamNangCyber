@@ -4,6 +4,9 @@ using System.Data;
 using Microsoft.Data.SqlClient;
 using System.Runtime.CompilerServices;
 using System.Data.SQLite;
+using System.Diagnostics;
+using System.IO;
+using System.Windows.Forms;
 namespace TuDienChuyenNganhCyberSecurity
 {
     public static class ButtonExtensions
@@ -101,6 +104,63 @@ namespace TuDienChuyenNganhCyberSecurity
 
             return coInDam || coInNghieng || coGachChan || coMauSac || coDoiFont;
         }
+
+        public static bool PushDatabaseToGitHub()
+        {
+            try
+            {
+                // 1. Thư mục chứa file .git (Thư mục gốc của project)
+                string repoPath = @"D:\MyData\Thông tin khóa học\Thông tin khóa học\Tài liệu học\CSharp\TuDienChuyenNganhCyberSecurity";
+
+                // 2. Tên file database thực tế của bạn (Thay "TuDien.db" bằng tên file thật của bạn)
+                string dbName = "CamNangCS.db";
+
+                // Tự động lấy đường dẫn tuyệt đối của file db đang chạy thực tế
+                string appPath = AppDomain.CurrentDomain.BaseDirectory;
+                string fullDbPath = Path.Combine(appPath, dbName);
+
+                if (!File.Exists(fullDbPath))
+                {
+                    MessageBox.Show($"Không tìm thấy file database tại:\n{fullDbPath}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return false;
+                }
+
+                // 3. Tính toán đường dẫn tương đối từ repoPath đến file DB để truyền vào lệnh Git
+                Uri repoUri = new Uri(repoPath + Path.DirectorySeparatorChar);
+                Uri dbUri = new Uri(fullDbPath);
+                string relativeDbPath = repoUri.MakeRelativeUri(dbUri).ToString().Replace("/", "\\");
+                relativeDbPath = Uri.UnescapeDataString(relativeDbPath); // Giải mã khoảng trắng (%20 -> khoảng trắng)
+
+                // 4. Thực thi lệnh Git qua CMD ngầm
+                string commitMessage = $"Auto-backup database: {DateTime.Now:yyyy-MM-dd HH:mm:ss}";
+
+                // Chỉ add duy nhất file database ở thư mục đang chạy
+                string arguments = $"/c cd /d \"{repoPath}\" && git add \"{relativeDbPath}\" && git commit -m \"{commitMessage}\" && git push origin main";
+
+                ProcessStartInfo processInfo = new ProcessStartInfo
+                {
+                    FileName = "cmd.exe",
+                    Arguments = arguments,
+                    CreateNoWindow = true,       // Chạy ngầm hoàn toàn
+                    UseShellExecute = false,
+                    RedirectStandardError = true,
+                    RedirectStandardOutput = true
+                };
+
+                using (Process process = Process.Start(processInfo))
+                {
+                    process.WaitForExit(); // Chờ Git xử lý xong
+                    return process.ExitCode == 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi hệ thống khi backup: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+        }
+
+
         [STAThread]
         static void Main()
         {
