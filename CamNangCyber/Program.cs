@@ -111,7 +111,7 @@ namespace TuDienChuyenNganhCyberSecurity
             try
             {
                 // 1. Thư mục chứa file .git (Thư mục gốc của project)
-                string repoPath = @"D:\MyData\Thông tin khóa học\Thông tin khóa học\Tài liệu học\CSharp\TuDienChuyenNganhCyberSecurity";
+                string repoPath = @"D:\MyData\Thông tin khóa học\Thông tin khóa học\Tài liệu học\CSharp\CamNangCyber";
 
                 // 2. Tên file database thực tế của bạn (Thay "TuDien.db" bằng tên file thật của bạn)
                 string dbName = "CamNangCS.db";
