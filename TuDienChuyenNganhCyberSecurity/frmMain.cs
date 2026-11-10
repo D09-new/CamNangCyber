@@ -9,16 +9,17 @@ namespace TuDienChuyenNganhCyberSecurity
         readonly int pageSize = 25;    // Số dòng trên một trang
         int totalPages = 1;   // Tổng số trang
         string kieuSapXep = "";
-        public static BindingSource bds_dscmb = new BindingSource();
-        public static BindingSource bds_dstu = new BindingSource();
-        public static BindingSource bds_dslinhvuc = new BindingSource();
-        public static BindingSource bds_dslinhvuc1 = new BindingSource();
-        public static BindingSource bds_dsbuoihocfrom = new BindingSource();
-        public static BindingSource bds_dsbuoihocto = new BindingSource();
-        public static BindingSource bds_dskhoahoc = new BindingSource();
-        public static BindingSource bds_dskhoahoc1 = new BindingSource();
+        public BindingSource bds_dscmb = new BindingSource();
+        public BindingSource bds_dstu = new BindingSource();
+        public BindingSource bds_dslinhvuc = new BindingSource();
+        public BindingSource bds_dslinhvuc1 = new BindingSource();
+        public BindingSource bds_dsbuoihocfrom = new BindingSource();
+        public BindingSource bds_dsbuoihocto = new BindingSource();
+        public BindingSource bds_dskhoahoc = new BindingSource();
+        public BindingSource bds_dskhoahoc1 = new BindingSource();
         int position = 0;
         int buoiHocMax = 0;
+        //biến trạng thái
         bool isAdd = false;
         bool isUpdate = false;
         bool isLoading = false;
@@ -34,6 +35,8 @@ namespace TuDienChuyenNganhCyberSecurity
         RichTextBox targetRtb;
         int selectionStart = -1;
         int selectionLength = 0;
+        //biến đếm modified
+        int modifiedCount = 0;
 
         public frmMain()
         {
@@ -446,6 +449,11 @@ namespace TuDienChuyenNganhCyberSecurity
 
         private void frmMain_FormClosing(object sender, FormClosingEventArgs e)
         {
+            //Nếu không có thay đổi thì không làm gì cả
+            if(modifiedCount == 0)
+            {
+                return;
+            }
             // 1. Hỏi xem bạn có muốn backup dữ liệu trước khi thoát không
             DialogResult result = MessageBox.Show("Bạn có muốn sao lưu dữ liệu lên GitHub trước khi thoát không?", "Xác nhận", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
             // 2. Nếu người dùng chọn Yes, thực hiện backup dữ liệu
@@ -796,6 +804,7 @@ namespace TuDienChuyenNganhCyberSecurity
                             cmd.ExecuteNonQuery();
                         }
                     }
+                    modifiedCount++;
                     MessageBox.Show("Thêm từ mới thành công.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     Reload();
                     isAdd = false;
@@ -897,6 +906,7 @@ namespace TuDienChuyenNganhCyberSecurity
                             }
                         }
                     }
+                    modifiedCount++;
                     MessageBox.Show("Cập nhật từ thành công.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     isUpdate = false;
                     Reload();
@@ -956,6 +966,7 @@ namespace TuDienChuyenNganhCyberSecurity
                             cmd.ExecuteNonQuery();
                         }
                     }
+                    modifiedCount++;
                     MessageBox.Show("Xóa từ thành công.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     Reload();
                 }
