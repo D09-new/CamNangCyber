@@ -1170,6 +1170,7 @@ namespace TuDienChuyenNganhCyberSecurity
             {
                 if (dlg.ShowDialog() != DialogResult.Cancel)
                 {
+                    btnShowColor.BackColor= dlg.Color; //lưu màu để tái sử dụng khi cần
                     ChangeColor(dlg.Color);
                 }
             }
