@@ -328,6 +328,7 @@ namespace TuDienChuyenNganhCyberSecurity
                     cmbTuDayDu.SelectedIndex = -1;
                     cmbTuVietTat.SelectedIndex = -1;
                     isSearching = false;
+                    btnTraCuu.BackColor = Color.White;
                     panelLoc.Visible = true;
                     if (position != -1 && bds_dstu[position] != null)
                     {
@@ -346,6 +347,7 @@ namespace TuDienChuyenNganhCyberSecurity
                     position = bds_dstu.Position;
                     panelLoc.Visible = false;
                     isSearching = true;
+                    btnTraCuu.BackColor = Color.Aquamarine;
                     btnTraCuu.Text = "Kết thúc tra cứu";
                     lbTuDayDu.Visible = cmbTuDayDu.Visible = lbTuVietTat.Visible = cmbTuVietTat.Visible = true;
                     btnThem.Enabled = btnLuu.Enabled = btnXoa.Enabled = dgvDSTU.Enabled = false;
@@ -684,6 +686,9 @@ namespace TuDienChuyenNganhCyberSecurity
             isAdd = false;
             isUpdate = false;
             isSearching = false;
+            btnCapNhat.BackColor = Color.White;
+            btnThem.BackColor = Color.White;
+            btnTraCuu.BackColor = Color.White;
             cmbLinhVuc.SelectedIndex = 0;
             cmbKhoaHoc.SelectedIndex = 0;
         }
@@ -708,6 +713,7 @@ namespace TuDienChuyenNganhCyberSecurity
                 txtBuoiHoc.Clear();
             }
             isAdd = true;
+            btnThem.BackColor = Color.Aquamarine;
             panelLoc.Visible = dgvDSTU.Enabled = btnTraCuu.Enabled = btnCapNhat.Enabled = btnTaiLai.Enabled = btnXoa.Enabled = btnThoat.Enabled = false;
             txtGhiChu.ReadOnly = false;
             txtNoiDung.ReadOnly = false;
@@ -750,6 +756,7 @@ namespace TuDienChuyenNganhCyberSecurity
                 cmbKhoaHoc1.SelectedValue = (row["KHOAHOC"] == null || row["KHOAHOC"] == DBNull.Value) ? null : row["KHOAHOC"].ToString().Trim();
             }
             isUpdate = true;
+            btnCapNhat.BackColor = Color.Aquamarine;
             panelLoc.Visible = dgvDSTU.Enabled = btnTraCuu.Enabled = btnThem.Enabled = btnTaiLai.Enabled = btnXoa.Enabled = btnThoat.Enabled = false;
             txtGhiChu.ReadOnly = false;
             txtNoiDung.ReadOnly = false;
@@ -813,6 +820,7 @@ namespace TuDienChuyenNganhCyberSecurity
                     MessageBox.Show("Thêm từ mới thành công.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     Reload();
                     isAdd = false;
+                    btnThem.BackColor = Color.White;
                     txtGhiChu.ReadOnly = true;
                     txtNoiDung.ReadOnly = true;
                     panelLoc.Visible = dgvDSTU.Enabled = btnTraCuu.Enabled = btnCapNhat.Enabled = btnTaiLai.Enabled = btnXoa.Enabled = btnThoat.Enabled = true;
@@ -914,6 +922,7 @@ namespace TuDienChuyenNganhCyberSecurity
                     modifiedCount++;
                     MessageBox.Show("Cập nhật từ thành công.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     isUpdate = false;
+                    btnCapNhat.BackColor = Color.White;
                     Reload();
                     txtGhiChu.ReadOnly = true;
                     txtNoiDung.ReadOnly = true;
@@ -1499,6 +1508,7 @@ namespace TuDienChuyenNganhCyberSecurity
                         btnTaiLai.Enabled = btnTraCuu.Enabled = btnThoat.Enabled = true;
                         cmbTuVietTat.Visible = cmbTuDayDu.Visible = true;
                         isUpdate = false;
+                        btnCapNhat.BackColor = Color.White;
                     }
                     else //chi tim kiem
                     {
@@ -1511,6 +1521,7 @@ namespace TuDienChuyenNganhCyberSecurity
                         }
                         e.Handled = true;
                         isSearching = false;
+                        btnTraCuu.BackColor = Color.White;
                     }
                 }
                 else if (isAdd)
@@ -1529,6 +1540,7 @@ namespace TuDienChuyenNganhCyberSecurity
                     lbKhoaHoc.Visible = cmbKhoaHoc1.Visible = lbBuoiHoc.Visible = txtBuoiHoc.Visible = panelFormatText.Visible = lbLinhVuc.Visible = cmbLinhVuc1.Visible = lbTuDayDu.Visible = txtTuDayDu.Visible = lbTuVietTat.Visible = txtTuVietTat.Visible = false;
                     //tat trang thai them
                     isAdd = false;
+                    btnThem.BackColor = Color.White;
                     //hien thi lai tu dang xem
                     if (position != -1)
                     {
@@ -1554,6 +1566,7 @@ namespace TuDienChuyenNganhCyberSecurity
                     lbKhoaHoc.Visible = cmbKhoaHoc1.Visible = lbBuoiHoc.Visible = txtBuoiHoc.Visible = panelFormatText.Visible = lbLinhVuc.Visible = cmbLinhVuc1.Visible = lbTuDayDu.Visible = txtTuDayDu.Visible = lbTuVietTat.Visible = txtTuVietTat.Visible = false;
                     //tat trang thai update
                     isUpdate = false;
+                    btnCapNhat.BackColor = Color.White;
                     //hien thi lai tu dang xem
                     if (position != -1)
                     {
