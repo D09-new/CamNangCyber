@@ -344,7 +344,7 @@ namespace TuDienChuyenNganhCyberSecurity
                 }
                 else
                 {
-                    position = bds_dstu.Position;
+                    //position = bds_dstu.Position;  //có khả năng gây lỗi nếu trang hiện tại không có dữ liệu, nên không lưu position ở đây nữa
                     panelLoc.Visible = false;
                     isSearching = true;
                     btnTraCuu.BackColor = Color.Aquamarine;
@@ -1265,6 +1265,7 @@ namespace TuDienChuyenNganhCyberSecurity
 
         }
 
+        //Phương thức phân trang
         private void DisplayPage(int page)
         {
             if (isUpdate) return;
@@ -1323,6 +1324,7 @@ namespace TuDienChuyenNganhCyberSecurity
             {
                 DataTable dtPage = pageRows.CopyToDataTable();
                 bds_dstu.DataSource = dtPage;
+                bds_dstu.Position = 0; // Đặt vị trí con trỏ về đầu trang
             }
             else
             {
@@ -1451,7 +1453,7 @@ namespace TuDienChuyenNganhCyberSecurity
 
         private void frmMain_KeyDown(object sender, KeyEventArgs e)
         {
-
+            //Crtl + S để lưu từ
             if (e.Control && e.KeyCode == Keys.S)
             {
                 if (isAdd || isUpdate)
@@ -1464,7 +1466,7 @@ namespace TuDienChuyenNganhCyberSecurity
                     this.ActiveControl = null;
                 }
             }
-
+            //Crtl + N để thêm từ
             if (e.Control && e.KeyCode == Keys.N) //them tu
             {
                 if (!isUpdate && !isSearching && !isAdd)
@@ -1474,7 +1476,7 @@ namespace TuDienChuyenNganhCyberSecurity
                     e.Handled = true;
                 }
             }
-
+            //Crtl + M để sửa từ
             if (e.Control && e.KeyCode == Keys.M) //chinh sua tu
             {
                 if (!isAdd && !isUpdate)
@@ -1484,7 +1486,7 @@ namespace TuDienChuyenNganhCyberSecurity
                     e.Handled = true;
                 }
             }
-
+            //Crtl + F để tra cứu từ
             if (e.Control && e.KeyCode == Keys.F) //tra cuu tu
             {
                 if (!isAdd && !isUpdate && !isSearching)
@@ -1494,7 +1496,7 @@ namespace TuDienChuyenNganhCyberSecurity
                     e.Handled = true;
                 }
             }
-
+            //Escape để thoát khỏi chế độ thêm/sửa/tìm kiếm
             if (e.KeyCode == Keys.Escape) //Thoat khi dang tra cuu/them/sua
             {
                 if (isSearching) //dang tim
@@ -1509,6 +1511,7 @@ namespace TuDienChuyenNganhCyberSecurity
                         cmbTuVietTat.Visible = cmbTuDayDu.Visible = true;
                         isUpdate = false;
                         btnCapNhat.BackColor = Color.White;
+                        cmbTuVietTat.Focus(); //đặt focus vào ô từ viết tắt để người dùng có thể tiếp tục tìm kiếm
                     }
                     else //chi tim kiem
                     {
@@ -1522,6 +1525,7 @@ namespace TuDienChuyenNganhCyberSecurity
                         e.Handled = true;
                         isSearching = false;
                         btnTraCuu.BackColor = Color.White;
+                        dgvDSTU.Focus(); //đặt focus vào datagridview để người dùng có thể dùng phím mũi tên để di chuyển
                     }
                 }
                 else if (isAdd)
@@ -1584,7 +1588,7 @@ namespace TuDienChuyenNganhCyberSecurity
                 btnXoa_Click(sender, e);
                 e.Handled = true;
             }
-            //Đổi màu nhanh
+            //Đổi màu nhanh Alt + C, Alt + D, Alt + B, Alt + R, Alt + G
             //Đổi theo màu đã chọn trước đó
             if (e.Alt && e.KeyCode == Keys.C)
             {
@@ -1620,7 +1624,7 @@ namespace TuDienChuyenNganhCyberSecurity
                 ChangeColor(Color.Green);
                 e.Handled = true;
             }
-
+            //Chèn ký tự đặc biệt nhanh Alt + S
             if (e.Alt && e.KeyCode == Keys.S)
             {
                 e.SuppressKeyPress = true;
@@ -1642,6 +1646,21 @@ namespace TuDienChuyenNganhCyberSecurity
                 }
                 InsertSymbol(btnShowSymbol.Text);
                 e.Handled = true;
+            }
+            if (dgvDSTU.ContainsFocus)
+            {
+                if(e.KeyCode == Keys.Left)
+                {
+                    e.SuppressKeyPress = true;
+                    btnPrePage_Click(sender, e);
+                    e.Handled = true;
+                }
+                else if(e.KeyCode == Keys.Right)
+                {
+                    e.SuppressKeyPress = true;
+                    btnNextPage_Click(sender, e);
+                    e.Handled = true;
+                }
             }
         }
 
