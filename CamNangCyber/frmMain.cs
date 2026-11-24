@@ -713,6 +713,10 @@ namespace TuDienChuyenNganhCyberSecurity
                 txtBuoiHoc.Clear();
             }
             isAdd = true;
+            if(bds_dstu.Count > 0 && bds_dstu.Position !=-1)
+            {
+                position = bds_dstu.Position;
+            }   
             btnThem.BackColor = Color.Aquamarine;
             panelLoc.Visible = dgvDSTU.Enabled = btnTraCuu.Enabled = btnCapNhat.Enabled = btnTaiLai.Enabled = btnXoa.Enabled = btnThoat.Enabled = false;
             txtGhiChu.ReadOnly = false;
@@ -748,6 +752,7 @@ namespace TuDienChuyenNganhCyberSecurity
             else
             {
                 isUpdate = true;
+                position = bds_dstu.Position;
                 DataRowView row = bds_dstu[bds_dstu.Position] as DataRowView;
                 tuviettat = txtTuVietTat.Text = row["TUVIETTAT"].ToString().Trim();
                 tudaydu = txtTuDayDu.Text = row["TUDAYDU"].ToString().Trim();
@@ -967,13 +972,20 @@ namespace TuDienChuyenNganhCyberSecurity
                         string query = "DELETE FROM TUDIEN WHERE ID = @ID";
                         using (SQLiteCommand cmd = new SQLiteCommand(query, connection))
                         {
-                            if (bds_dstu.Position > 0)
+                            if(bds_dstu.Count <= 1) // Nếu chỉ còn 1 bản ghi, sau khi xóa sẽ không còn bản ghi nào, nên đặt position = -1
                             {
-                                position = bds_dstu.Position - 1;
+                                position = -1;
                             }
-                            else
+                            //Nếu có nhiều hơn 1 bản ghi
+                            //Và đang ở bản ghi đầu tiên thì đưa position về 0 (bản ghi đầu tiên sau khi xóa)
+                            else if (bds_dstu.Position == 0)
                             {
                                 position = 0;
+                            }
+                            // Nếu ở các bản ghi không phải đầu tiên thì lùi về bản ghi trước đó
+                            else
+                            {
+                                position = bds_dstu.Position - 1;
                             }
                             DataRowView row = bds_dstu[bds_dstu.Position] as DataRowView;
                             cmd.Parameters.AddWithValue("@ID", row["ID"]);
@@ -1094,7 +1106,7 @@ namespace TuDienChuyenNganhCyberSecurity
             if (isLoading) return;
             if (bds_dstu.Count > 0)
             {
-                position = bds_dstu.Position;
+                //position = bds_dstu.Position;
                 DataRowView row = bds_dstu[bds_dstu.Position] as DataRowView;
                 GanNoiDungRichTextBox(txtNoiDung, row["NoiDung"]);
                 GanNoiDungRichTextBox(txtGhiChu, row["GhiChu"]);
@@ -1324,7 +1336,7 @@ namespace TuDienChuyenNganhCyberSecurity
             {
                 DataTable dtPage = pageRows.CopyToDataTable();
                 bds_dstu.DataSource = dtPage;
-                bds_dstu.Position = 0; // Đặt vị trí con trỏ về đầu trang
+                bds_dstu.Position = position; // Đặt vị trí con trỏ về vị trí đã lưu trước đó
             }
             else
             {
@@ -1341,6 +1353,7 @@ namespace TuDienChuyenNganhCyberSecurity
             if (isPageLoading) return; // Nếu đang load trang, không thực hiện hành động
             if (currentPage > 1)
             {
+                position = 0; // Reset vị trí con trỏ khi chuyển trang
                 currentPage--;
                 DisplayPage(currentPage);
             }
@@ -1352,6 +1365,7 @@ namespace TuDienChuyenNganhCyberSecurity
             if (isPageLoading) return; // Nếu đang load trang, không thực hiện hành động
             if (currentPage != 1)
             {
+                position = 0; // Reset vị trí con trỏ khi chuyển trang
                 currentPage = 1;
                 DisplayPage(currentPage);
             }
@@ -1362,6 +1376,7 @@ namespace TuDienChuyenNganhCyberSecurity
             if (isPageLoading) return; // Nếu đang load trang, không thực hiện hành động
             if (currentPage < totalPages)
             {
+                position = 0; // Reset vị trí con trỏ khi chuyển trang
                 currentPage++;
                 DisplayPage(currentPage);
             }
@@ -1372,6 +1387,7 @@ namespace TuDienChuyenNganhCyberSecurity
         {
             if (currentPage != totalPages)
             {
+                position = 0; // Reset vị trí con trỏ khi chuyển trang
                 currentPage = totalPages;
                 DisplayPage(currentPage);
             }
@@ -1401,6 +1417,7 @@ namespace TuDienChuyenNganhCyberSecurity
             if (isPageLoading) return; // Nếu đang load trang, không thực hiện hành động
             if (targetPage != currentPage)
             {
+                position = 0; // Reset vị trí con trỏ khi chuyển trang
                 currentPage = targetPage;
                 DisplayPage(currentPage);
             }
